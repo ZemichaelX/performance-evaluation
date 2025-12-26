@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useStore } from './store/useStore';
 import { Login } from './pages/Login';
-import { EmployeeDashboard } from './pages/employee/Dashboard';
+import { EmployeeDashboard } from './pages/employee/EmployeeDashboard';
+import { EvaluationHistory } from './pages/employee/History';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { CreateCycle } from './pages/admin/CreateCycle';
 import { DashboardLayout } from './layouts/DashboardLayout';
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
             <DashboardLayout type="employee">
               <Routes>
                 <Route path="dashboard" element={<EmployeeDashboard />} />
+                <Route path="history" element={<EvaluationHistory />} />
                 <Route path="*" element={<Navigate to="dashboard" />} />
               </Routes>
             </DashboardLayout>
@@ -36,6 +39,7 @@ function App() {
             <DashboardLayout type="admin">
               <Routes>
                 <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="create-cycle" element={<CreateCycle />} />
                 <Route path="*" element={<Navigate to="dashboard" />} />
               </Routes>
             </DashboardLayout>

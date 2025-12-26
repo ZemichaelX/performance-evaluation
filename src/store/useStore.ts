@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User, KPI, EvaluationCycle, EvaluationSubmission } from '../types';
+import type { User, KPI, EvaluationCycle, EvaluationSubmission } from '../types';
 
 interface AppState {
   currentUser: User | null;
