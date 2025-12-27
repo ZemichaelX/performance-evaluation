@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { X, Save, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { useStore } from '../store/useStore';
 
 interface EvaluationModalProps {
@@ -21,18 +21,20 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
   const [scores, setScores] = useState<Record<string, number>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [improvementAreas, setImprovementAreas] = useState('');
+  const [nextGoals, setNextGoals] = useState('');
+  const [employeeComments, setEmployeeComments] = useState('');
+  const [signatures, setSignatures] = useState({ employee: '', supervisor: '', ceo: '', date: new Date().toISOString().split('T')[0] });
 
   const allQuestions = competencyFrameworks.flatMap(f => f.questions);
-  const displayQuestions = allQuestions.length > 0 ? allQuestions : [
-    { id: 'q1', category: 'Behavioral', text: 'Demonstrates effective teamwork and collaboration.' },
-    { id: 'q2', category: 'Behavioral', text: 'Communicates complex ideas clearly and concisely.' },
-    { id: 'q3', category: 'Technical', text: 'Demonstrates deep knowledge of required technologies.' },
-    { id: 'q4', category: 'Technical', text: 'Consistently delivers high-quality work with precision.' },
-  ];
 
   useEffect(() => {
     if (isOpen) {
       setScores({});
+      setImprovementAreas('');
+      setNextGoals('');
+      setEmployeeComments('');
+      setSignatures({ employee: '', supervisor: '', ceo: '', date: new Date().toISOString().split('T')[0] });
       setIsSuccess(false);
     }
   }, [isOpen]);
@@ -44,7 +46,7 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
   };
 
   const handleSubmit = () => {
-    if (Object.keys(scores).length < displayQuestions.length) {
+    if (Object.keys(scores).length < allQuestions.length) {
       return;
     }
 
@@ -57,7 +59,11 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
         cycleId,
         type,
         status: 'submitted',
-        scores: Object.entries(scores).map(([k, v]) => ({ questionId: k, score: v }))
+        scores: Object.entries(scores).map(([k, v]) => ({ questionId: k, score: v })),
+        improvementAreas,
+        nextGoals,
+        employeeComments,
+        signatures
       });
       setIsSubmitting(false);
       setIsSuccess(true);
@@ -67,20 +73,25 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
     }, 1200);
   };
 
-  const categories = Array.from(new Set(displayQuestions.map(q => q.category)));
+  const categories = Array.from(new Set(allQuestions.map(q => q.category))).sort();
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose}></div>
       
-      <div className="relative bg-white rounded-[40px] shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="relative bg-white rounded-[40px] shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         
         <div className="p-10 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
-          <div>
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight capitalize">
-              {type} <span className="text-indigo-600">Evaluation</span>
-            </h2>
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mt-1">Rate performance benchmarks (1-5)</p>
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 bg-indigo-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-indigo-100 transform -rotate-6">
+              <ShieldCheck className="w-8 h-8" />
+            </div>
+            <div>
+              <h2 className="text-3xl font-black text-slate-900 tracking-tight capitalize">
+                {type} <span className="text-indigo-600">Audit</span>
+              </h2>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">Industrial Performance Protocol</p>
+            </div>
           </div>
           <button onClick={onClose} className="p-3 text-slate-400 hover:bg-slate-100 rounded-2xl transition-all">
             <X className="w-6 h-6" />
@@ -88,34 +99,46 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
         </div>
 
         {!isSuccess ? (
-          <div className="flex-1 overflow-y-auto p-10 space-y-12 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-10 space-y-16 custom-scrollbar">
             <div className="bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100 flex gap-4 text-indigo-900 text-sm font-bold">
               <AlertCircle className="w-5 h-5 shrink-0" />
-              <p>Your responses are encrypted and stored as immutable performance data. Review meticulously.</p>
+              <p>Your responses are encrypted and stored as immutable performance data. Review meticulously against industrial benchmarks.</p>
             </div>
 
             {categories.map(cat => (
               <div key={cat} className="space-y-6">
-                <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider flex items-center gap-3">
+                <div className="flex items-center gap-4">
+                  <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                    {cat}
+                  </h3>
                   <div className="h-px flex-1 bg-slate-100" />
-                  {cat} Competencies
-                  <div className="h-px flex-1 bg-slate-100" />
-                </h3>
-                {displayQuestions.filter(q => q.category === cat).map(q => (
-                  <div key={q.id} className="bg-white p-8 rounded-3xl border border-slate-100 hover:border-indigo-200 transition-all group">
-                    <p className="text-slate-900 font-extrabold text-lg mb-6 leading-relaxed">{q.text}</p>
-                    <div className="flex gap-3">
-                      {[1, 2, 3, 4, 5].map(rating => (
+                </div>
+                
+                {allQuestions.filter(q => q.category === cat).map(q => (
+                  <div key={q.id} className="bg-white p-8 rounded-3xl border border-slate-100 hover:border-indigo-200 transition-all group shadow-sm">
+                    <p className="text-slate-900 font-extrabold text-sm mb-6 leading-relaxed flex gap-4">
+                       <span className="text-indigo-300">#</span>
+                       {q.text}
+                    </p>
+                    <div className="grid grid-cols-5 gap-3">
+                      {[
+                        {v: 5, l: 'Exceptional'},
+                        {v: 4, l: 'Effective'},
+                        {v: 3, l: 'Encouraging'},
+                        {v: 2, l: 'Satisfactory'},
+                        {v: 1, l: 'Low'}
+                      ].map(rating => (
                         <button
-                          key={rating}
-                          onClick={() => handleScoreChange(q.id, rating)}
-                          className={`flex-1 py-4 rounded-2xl font-black transition-all transform active:scale-95 ${
-                            scores[q.id] === rating 
+                          key={rating.v}
+                          onClick={() => handleScoreChange(q.id, rating.v)}
+                          className={`group/btn relative py-6 rounded-2xl font-black transition-all transform active:scale-95 flex flex-col items-center justify-center gap-1 ${
+                            scores[q.id] === rating.v 
                               ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200 ring-4 ring-indigo-50' 
                               : 'bg-slate-50 text-slate-400 border border-slate-100 hover:border-indigo-300 hover:text-indigo-600'
                           }`}
                         >
-                          {rating}
+                          <span className="text-xl">{rating.v}</span>
+                          <span className={`text-[8px] uppercase tracking-tighter ${scores[q.id] === rating.v ? 'text-indigo-100' : 'text-slate-400 group-hover/btn:text-indigo-400'}`}>{rating.l}</span>
                         </button>
                       ))}
                     </div>
@@ -123,6 +146,76 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
                 ))}
               </div>
             ))}
+
+            <div className="h-px bg-slate-100" />
+
+            {/* Qualitative Sections */}
+            <div className="space-y-10 pt-4">
+              <section className="space-y-4">
+                <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] px-2">4. Summary of Priority Improvement Areas</h4>
+                <textarea 
+                  value={improvementAreas}
+                  onChange={e => setImprovementAreas(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 outline-none transition-all placeholder:text-slate-300 min-h-[160px]"
+                  placeholder="Identify specific competencies requiring immediate optimization..."
+                />
+              </section>
+
+              <section className="space-y-4">
+                <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] px-2">5. Goals For Next Review Period</h4>
+                <textarea 
+                  value={nextGoals}
+                  onChange={e => setNextGoals(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 outline-none transition-all placeholder:text-slate-300 min-h-[160px]"
+                  placeholder="Outline agreed-upon milestones and performance indicators for the following cycle..."
+                />
+              </section>
+
+              <section className="space-y-4">
+                <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] px-2">6. Employee Comments</h4>
+                <textarea 
+                  value={employeeComments}
+                  onChange={e => setEmployeeComments(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 outline-none transition-all placeholder:text-slate-300 min-h-[160px]"
+                  placeholder="Additional context or shared perspectives on this audit..."
+                />
+              </section>
+
+              <section className="space-y-6">
+                <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] px-2">7. Signatures</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                   <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-3">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Employee Digital Sign-off</p>
+                      <input 
+                        type="text"
+                        value={signatures.employee}
+                        onChange={e => setSignatures({...signatures, employee: e.target.value})}
+                        className="w-full bg-transparent border-none text-slate-900 font-black text-lg p-0 focus:ring-0 placeholder:text-slate-200 italic font-serif"
+                        placeholder="Print Full Name..."
+                      />
+                   </div>
+                   <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-3">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Supervisor Digital Sign-off</p>
+                      <input 
+                        type="text"
+                        value={signatures.supervisor}
+                        onChange={e => setSignatures({...signatures, supervisor: e.target.value})}
+                        className="w-full bg-transparent border-none text-slate-900 font-black text-lg p-0 focus:ring-0 placeholder:text-slate-200 italic font-serif"
+                        placeholder="Print Full Name..."
+                      />
+                   </div>
+                   <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-3 md:col-span-2">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Audit Closure Date</p>
+                      <input 
+                        type="date"
+                        value={signatures.date}
+                        onChange={e => setSignatures({...signatures, date: e.target.value})}
+                        className="w-full bg-transparent border-none text-slate-900 font-black text-sm p-0 focus:ring-0"
+                      />
+                   </div>
+                </div>
+              </section>
+            </div>
           </div>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center p-20 text-center">
@@ -144,7 +237,7 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
             </button>
             <button 
               onClick={handleSubmit}
-              disabled={isSubmitting || Object.keys(scores).length < displayQuestions.length}
+              disabled={isSubmitting || Object.keys(scores).length < allQuestions.length}
               className="px-10 py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-2xl shadow-indigo-100 flex items-center gap-3 disabled:opacity-30 disabled:grayscale transition-all"
             >
               {isSubmitting ? (

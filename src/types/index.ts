@@ -58,6 +58,15 @@ export interface EvaluationSubmission {
   submittedAt?: string;
   scores: CompetencyScore[];
   formId?: string; // Differentiates forms for peer vs supervisor
+  improvementAreas?: string;
+  nextGoals?: string;
+  employeeComments?: string;
+  signatures?: {
+    employee?: string;
+    supervisor?: string;
+    ceo?: string;
+    date?: string;
+  };
 }
 
 export interface EvaluationCycle {

@@ -19,7 +19,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export const CreateCycle = () => {
   const navigate = useNavigate();
-  const { users, deployEvaluationCycle, objectives, getObjectKPIs, competencyFrameworks } = useStore();
+  const { users, deployEvaluationCycle, objectives, getObjectKPIs, competencyFrameworks, addCompetencyFramework } = useStore();
   
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -30,8 +30,27 @@ export const CreateCycle = () => {
     evaluateeIds: [] as string[],
     assignments: {} as Record<string, { peerIds: string[], supervisorIds: string[] }>,
     questionCollections: [
-      { id: 'qc-1', name: 'Behavioral Metrics', frameworkId: competencyFrameworks[0]?.id || '' },
-      { id: 'qc-2', name: 'Technical Proficiency', frameworkId: '' }
+      { 
+        id: 'qc-1', 
+        name: 'Behavioral Competencies', 
+        frameworkId: 'fw-behavioral',
+        customQuestions: [] as { id: string, text: string, category: string }[],
+        overrides: {} as Record<string, string>
+      },
+      { 
+        id: 'qc-2', 
+        name: 'Technical Competencies', 
+        frameworkId: 'fw-technical',
+        customQuestions: [] as { id: string, text: string, category: string }[],
+        overrides: {} as Record<string, string>
+      },
+      { 
+        id: 'qc-3', 
+        name: 'Leadership Competencies', 
+        frameworkId: 'fw-leadership',
+        customQuestions: [] as { id: string, text: string, category: string }[],
+        overrides: {} as Record<string, string>
+      }
     ],
     validations: {
         minPeers: 3,
@@ -41,6 +60,21 @@ export const CreateCycle = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedEvaluatee, setExpandedEvaluatee] = useState<string | null>(null);
+  
+  // Question Orchestration UX States
+  const [expandedQCIds, setExpandedQCIds] = useState<string[]>([]);
+  const [frameworkSearch, setFrameworkSearch] = useState('');
+
+  const toggleQCExpansion = (id: string) => {
+    setExpandedQCIds(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const filteredFrameworks = competencyFrameworks.filter(f => 
+    f.name.toLowerCase().includes(frameworkSearch.toLowerCase()) ||
+    f.description?.toLowerCase().includes(frameworkSearch.toLowerCase())
+  );
 
   const employees = users.filter(u => u.role === 'employee');
   const filteredEmployees = employees.filter(u => 
@@ -89,6 +123,48 @@ export const CreateCycle = () => {
   };
 
   const handlePublish = () => {
+    const finalFrameworkIds: string[] = [];
+    
+    // Process each collection to determine its final framework identity
+    formData.questionCollections.forEach(qc => {
+      const framework = competencyFrameworks.find(f => f.id === qc.frameworkId);
+      const hasOverrides = Object.keys(qc.overrides).length > 0;
+      const hasCustom = qc.customQuestions.length > 0;
+      
+      if (hasOverrides || hasCustom) {
+        // Create a unique Virtual Framework for this specific collection
+        const virtualFrameworkId = `custom-fw-${Date.now()}-${qc.id}`;
+        
+        // Merge framework questions (with potential overrides)
+        const frameworkQuestions = framework 
+          ? framework.questions.map(q => ({
+              ...q,
+              text: qc.overrides[q.id] || q.text
+            }))
+          : [];
+
+        // Combine with ad-hoc custom questions
+        addCompetencyFramework({
+          id: virtualFrameworkId,
+          name: qc.name,
+          description: `Customized performance protocol for ${formData.title}`,
+          questions: [
+            ...frameworkQuestions,
+            ...qc.customQuestions.map(q => ({
+              id: q.id,
+              category: q.category,
+              text: q.text
+            }))
+          ]
+        });
+        
+        finalFrameworkIds.push(virtualFrameworkId);
+      } else if (qc.frameworkId) {
+        // Use the standard template framework as-is
+        finalFrameworkIds.push(qc.frameworkId);
+      }
+    });
+
     deployEvaluationCycle({
       id: `cycle-${Date.now()}`,
       title: formData.title,
@@ -96,9 +172,9 @@ export const CreateCycle = () => {
       endDate: formData.endDate,
       type: formData.type as any,
       status: 'active',
-      weights: { own: 60, shared: 40 }, // Defaulting for simplicity in this flow
+      weights: { own: 60, shared: 40 },
       competencies: { behavioral: true, technical: true, leadership: false },
-      customCompetencyFrameworkIds: formData.questionCollections.map(qc => qc.frameworkId).filter(id => !!id)
+      customCompetencyFrameworkIds: finalFrameworkIds
     }, formData.assignments);
     navigate('/admin/dashboard');
   };
@@ -110,14 +186,24 @@ export const CreateCycle = () => {
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">Industrial <span className="text-indigo-600">Evaluation Creator</span></h1>
           <p className="text-slate-500 font-semibold tracking-tight">Strategic deployment of multi-dimensional performance audit protocols.</p>
         </div>
-        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-100">
+        <div className="flex items-center gap-4 bg-slate-50 p-3 rounded-[24px] border border-slate-100">
            {[1, 2, 3, 4, 5].map(s => (
-             <div 
-               key={s} 
-               className={`h-2 rounded-full transition-all duration-500 ${
-                 step === s ? 'w-8 bg-indigo-600' : step > s ? 'w-4 bg-indigo-200' : 'w-2 bg-slate-200'
-               }`} 
-             />
+             <div key={s} className="flex items-center gap-4">
+               <div 
+                 className={`w-8 h-8 rounded-xl flex items-center justify-center text-[11px] font-black transition-all duration-500 ${
+                   step === s 
+                     ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 ring-4 ring-indigo-50' 
+                     : step > s 
+                       ? 'bg-green-500 text-white' 
+                       : 'bg-white text-slate-300 border border-slate-100'
+                 }`}
+               >
+                 {step > s ? <Check className="w-4 h-4" /> : s}
+               </div>
+               {s < 5 && (
+                 <div className={`w-6 h-[1.5px] rounded-full transition-colors duration-500 ${step > s ? 'bg-green-200' : 'bg-slate-200'}`} />
+               )}
+             </div>
            ))}
         </div>
       </header>
@@ -333,7 +419,7 @@ export const CreateCycle = () => {
                                       {getObjectKPIs(obj.id).map(kpi => (
                                         <div key={kpi.id} className="text-xs text-slate-400 font-bold flex justify-between border-b border-slate-50 py-2">
                                           <span>{kpi.title}</span>
-                                          <span className="text-slate-900 font-black">{kpi.target}% Target</span>
+                                          <span className="text-slate-900 font-black">{kpi.weight}%</span>
                                         </div>
                                       ))}
                                     </div>
@@ -352,96 +438,296 @@ export const CreateCycle = () => {
 
           {step === 4 && (
             <div className="space-y-10 animate-in fade-in slide-in-from-right-4 duration-500 text-left">
-              <h2 className="text-2xl font-black text-slate-900 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600">
-                  <ShieldCheck className="w-6 h-6" />
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-black text-slate-900 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600">
+                    <ShieldCheck className="w-6 h-6" />
+                  </div>
+                  Question Orchestration
+                </h2>
+                <div className="flex gap-2">
+                  <span className="text-[10px] font-black uppercase text-slate-400 bg-slate-100 px-3 py-1 rounded-full">
+                    {formData.questionCollections.length} ACTIVE SUITES
+                  </span>
                 </div>
-                Question Collection Management
-              </h2>
+              </div>
 
-              <div className="grid lg:grid-cols-2 gap-10">
-                <section className="bg-slate-50 p-10 rounded-[40px] border border-slate-100 space-y-8">
-                   <h3 className="font-black text-slate-900 flex justify-between items-center">
-                     Metric Collections
-                     <button 
-                       onClick={() => setFormData(prev => ({ 
-                           ...prev, 
-                           questionCollections: [...prev.questionCollections, { id: `qc-${Date.now()}`, name: 'New Collection', frameworkId: '' }] 
-                       }))}
-                       className="text-indigo-600 text-[10px] uppercase font-black flex items-center gap-2"
-                     >
-                        <Plus className="w-4 h-4" /> Add Type
-                     </button>
-                   </h3>
-                   <div className="space-y-4">
-                      {formData.questionCollections.map((qc, idx) => (
-                        <div key={qc.id} className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex gap-4">
-                           <div className="flex-1 space-y-3">
-                              <input 
-                                type="text"
-                                value={qc.name}
-                                onChange={e => {
-                                    const copy = [...formData.questionCollections];
-                                    copy[idx].name = e.target.value;
-                                    setFormData({...formData, questionCollections: copy});
-                                }}
-                                className="w-full font-black text-slate-900 border-none p-0 focus:ring-0 text-sm"
-                                placeholder="Collection Name"
-                              />
-                              <select 
-                                value={qc.frameworkId}
-                                onChange={e => {
-                                    const copy = [...formData.questionCollections];
-                                    copy[idx].frameworkId = e.target.value;
-                                    setFormData({...formData, questionCollections: copy});
-                                }}
-                                className="w-full bg-slate-50 text-[11px] font-bold text-slate-500 rounded-lg border-slate-100 px-3 py-2 cursor-pointer"
-                              >
-                                 <option value="">Select Framework (Competency)</option>
-                                 {competencyFrameworks.map(cf => <option key={cf.id} value={cf.id}>{cf.name}</option>)}
-                              </select>
-                           </div>
-                           <button 
-                             onClick={() => setFormData(prev => ({ 
-                                 ...prev, 
-                                 questionCollections: prev.questionCollections.filter(item => item.id !== qc.id) 
-                             }))}
-                             className="text-slate-200 hover:text-red-500 transition-colors"
-                           >
-                             <Trash2 className="w-5 h-5" />
-                           </button>
-                        </div>
-                      ))}
-                   </div>
+              <div className="max-w-3xl mx-auto space-y-10">
+                {/* Framework Library - Search & Quick Add */}
+                <section className="bg-indigo-600 p-8 rounded-[40px] shadow-2xl shadow-indigo-100 text-white space-y-6">
+                  <div className="flex justify-between items-center sm:flex-row flex-col gap-4">
+                    <div>
+                      <h3 className="font-black text-xl tracking-tight">Framework Library</h3>
+                      <p className="text-indigo-200 text-xs font-bold uppercase tracking-widest mt-1">Industrial Competency Suites</p>
+                    </div>
+                    <div className="relative w-full sm:w-auto">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-300" />
+                      <input 
+                        type="text"
+                        placeholder="Search suite..."
+                        value={frameworkSearch}
+                        onChange={e => setFrameworkSearch(e.target.value)}
+                        className="bg-indigo-700/50 border-none rounded-2xl pl-10 pr-4 py-2 text-xs font-bold placeholder:text-indigo-400 focus:ring-2 focus:ring-indigo-400 outline-none w-full sm:w-48 transition-all focus:sm:w-64 text-white"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {filteredFrameworks.map(f => {
+                      const isAdded = formData.questionCollections.some(qc => qc.frameworkId === f.id);
+                      return (
+                        <button 
+                          key={f.id}
+                          onClick={() => {
+                            if (isAdded) {
+                              setFormData(prev => ({
+                                ...prev,
+                                questionCollections: prev.questionCollections.filter(qc => qc.frameworkId !== f.id)
+                              }));
+                            } else {
+                              const newId = `qc-${Date.now()}-${f.id}`;
+                              setFormData(prev => ({
+                                ...prev,
+                                questionCollections: [
+                                  ...prev.questionCollections,
+                                  { id: newId, name: f.name, frameworkId: f.id, customQuestions: [] as { id: string, text: string, category: string }[], overrides: {} as Record<string, string> }
+                                ]
+                              }));
+                              // Expand new collection immediately
+                              setExpandedQCIds(prev => [...prev, newId]);
+                            }
+                          }}
+                          className={`p-4 rounded-[28px] border text-left transition-all group relative overflow-hidden ${
+                            isAdded 
+                              ? 'bg-white text-indigo-600 border-white shadow-lg translate-y-[-2px]' 
+                              : 'bg-indigo-700/40 border-indigo-500/30 text-indigo-100 hover:bg-indigo-700/60'
+                          }`}
+                        >
+                          <div className="flex justify-between items-start mb-2 relative z-10">
+                             <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${isAdded ? 'bg-indigo-100 text-indigo-600' : 'bg-indigo-800 text-indigo-400 group-hover:bg-indigo-700'}`}>
+                               {isAdded ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                             </div>
+                          </div>
+                          <p className="font-black text-[11px] leading-tight transition-colors relative z-10">{f.name}</p>
+                          <p className={`text-[9px] font-bold mt-1 uppercase tracking-tighter relative z-10 ${isAdded ? 'text-indigo-400' : 'text-indigo-300/50'}`}>{f.questions.length} Metrics</p>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </section>
 
                 <section className="bg-slate-50 p-10 rounded-[40px] border border-slate-100 space-y-8">
-                   <h3 className="font-black text-slate-900">Validation Thresholds</h3>
-                   <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                         <div className="space-y-1">
-                            <p className="text-sm font-black text-slate-700">Minimum Peer Evaluators</p>
-                            <p className="text-[11px] font-bold text-slate-400">Total requirements per evaluatee</p>
-                         </div>
-                         <input 
-                            type="number" 
-                            value={formData.validations.minPeers}
-                            onChange={e => setFormData({...formData, validations: {...formData.validations, minPeers: parseInt(e.target.value)}})}
-                            className="w-16 bg-white border border-slate-200 rounded-xl px-3 py-2 text-center font-black" 
-                         />
-                      </div>
-                      <div className="flex items-center justify-between">
-                         <div className="space-y-1">
-                            <p className="text-sm font-black text-slate-700">Supervisor Mandatory</p>
-                            <p className="text-[11px] font-bold text-slate-400">Force hierarchical review</p>
-                         </div>
-                         <button 
-                            onClick={() => setFormData({...formData, validations: {...formData.validations, requireSupervisor: !formData.validations.requireSupervisor}})}
-                            className={`w-14 h-8 rounded-full transition-all relative ${formData.validations.requireSupervisor ? 'bg-indigo-600' : 'bg-slate-200'}`}
-                         >
-                            <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all ${formData.validations.requireSupervisor ? 'left-7' : 'left-1'}`} />
-                         </button>
-                      </div>
+                   <h3 className="font-black text-slate-900 flex justify-between items-center">
+                     Active Orchestration
+                     <button 
+                       onClick={() => {
+                          const newId = `qc-${Date.now()}`;
+                          setFormData(prev => ({ 
+                              ...prev, 
+                              questionCollections: [
+                                ...prev.questionCollections, 
+                                { id: newId, name: 'Untitled Collection', frameworkId: '', customQuestions: [] as { id: string, text: string, category: string }[], overrides: {} as Record<string, string> }
+                              ] 
+                          }));
+                          setExpandedQCIds(prev => [...prev, newId]);
+                       }}
+                       className="text-indigo-600 text-[10px] uppercase font-black flex items-center gap-2 px-4 py-2 bg-white rounded-xl shadow-sm border border-slate-100 transition-all hover:shadow-md active:scale-95"
+                     >
+                        <Plus className="w-4 h-4" /> New Ad-hoc Collection
+                     </button>
+                   </h3>
+                   
+                   <div className="space-y-4">
+                      {formData.questionCollections.map((qc, idx) => {
+                        const framework = competencyFrameworks.find(f => f.id === qc.frameworkId);
+                        const isExpanded = expandedQCIds.includes(qc.id);
+                        
+                        return (
+                          <div key={qc.id} className={`bg-white rounded-[32px] border transition-all overflow-hidden ${isExpanded ? 'border-indigo-200 ring-4 ring-indigo-50/50 shadow-xl' : 'border-slate-100 hover:border-slate-200 shadow-sm'}`}>
+                             <div className="p-6">
+                               <div className="flex gap-4 items-start">
+                                 <div className="flex-1 space-y-3">
+                                    <div className="flex items-center gap-3">
+                                      <input 
+                                        type="text"
+                                        value={qc.name}
+                                        onChange={e => {
+                                            const copy = [...formData.questionCollections];
+                                            copy[idx].name = e.target.value;
+                                            setFormData({...formData, questionCollections: copy});
+                                        }}
+                                        className="font-black text-slate-900 border-none p-0 focus:ring-0 text-sm bg-transparent w-full"
+                                        placeholder="Suite Name"
+                                      />
+                                      {framework && (
+                                        <span className="text-[9px] font-black uppercase text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-md shrink-0">Industrial Suite</span>
+                                      )}
+                                    </div>
+                                    <select 
+                                      value={qc.frameworkId}
+                                      onChange={e => {
+                                          const copy = [...formData.questionCollections];
+                                          copy[idx].frameworkId = e.target.value;
+                                          setFormData({...formData, questionCollections: copy});
+                                      }}
+                                      className="w-full bg-slate-50 text-[11px] font-bold text-slate-500 rounded-xl border-none px-4 py-2.5 cursor-pointer focus:ring-2 focus:ring-slate-100 transition-all"
+                                    >
+                                       <option value="">Select Protocol Template</option>
+                                       {competencyFrameworks.map(cf => <option key={cf.id} value={cf.id}>{cf.name}</option>)}
+                                    </select>
+                                 </div>
+                                 <div className="flex items-center gap-1">
+                                   <button 
+                                     onClick={() => setFormData(prev => ({ 
+                                         ...prev, 
+                                         questionCollections: prev.questionCollections.filter(item => item.id !== qc.id) 
+                                     }))}
+                                     className="text-slate-200 hover:text-red-500 hover:bg-red-50 p-2 rounded-xl transition-all shrink-0"
+                                   >
+                                     <Trash2 className="w-5 h-5" />
+                                   </button>
+                                 </div>
+                               </div>
+
+                               <div className="pt-4 mt-2 border-t border-slate-50">
+                                 <button 
+                                   onClick={() => toggleQCExpansion(qc.id)}
+                                   className="w-full flex justify-between items-center group/btn"
+                                 >
+                                   <div className="flex items-center gap-3">
+                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Performance Benchmarks</p>
+                                     <span className="text-[9px] font-black text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100/50">
+                                       { (framework?.questions.length || 0) + qc.customQuestions.length } PROTOCOLS
+                                     </span>
+                                   </div>
+                                   <ChevronDown className={`w-5 h-5 text-slate-300 group-hover/btn:text-indigo-500 transition-all duration-500 ${isExpanded ? 'rotate-180 text-indigo-500' : ''}`} />
+                                 </button>
+
+                                 <AnimatePresence>
+                                   {isExpanded && (
+                                     <motion.div 
+                                       initial={{ height: 0, opacity: 0 }}
+                                       animate={{ height: 'auto', opacity: 1 }}
+                                       exit={{ height: 0, opacity: 0 }}
+                                       className="overflow-hidden"
+                                     >
+                                       <div className="pt-6 space-y-4">
+                                          {/* Framework Questions */}
+                                          <div className="grid gap-2">
+                                            {framework?.questions.map((q, qIdx) => {
+                                              const currentText = qc.overrides[q.id] || q.text;
+                                              const isModified = !!qc.overrides[q.id];
+
+                                              return (
+                                                <div key={q.id} className={`p-4 rounded-2xl text-[11px] font-bold flex gap-4 border transition-all group/item ${isModified ? 'bg-amber-50/30 border-amber-100 hover:border-amber-200' : 'bg-slate-50/50 border-slate-100 hover:bg-white hover:border-indigo-100 hover:shadow-sm'}`}>
+                                                  <span className={`font-serif italic text-xs transition-colors ${isModified ? 'text-amber-500' : 'text-indigo-300'}`}>#{qIdx + 1}</span>
+                                                  <div className="flex-1 space-y-2">
+                                                    <textarea 
+                                                      value={currentText}
+                                                      onChange={e => {
+                                                        const copy = [...formData.questionCollections];
+                                                        copy[idx].overrides = { ...copy[idx].overrides, [q.id]: e.target.value };
+                                                        setFormData({...formData, questionCollections: copy});
+                                                      }}
+                                                      className="w-full bg-transparent border-none p-0 text-[11px] font-bold text-slate-700 focus:ring-0 resize-none leading-relaxed placeholder:text-slate-300 min-h-[40px]"
+                                                      placeholder="Standard benchmark text..."
+                                                    />
+                                                    <div className="flex justify-between items-center">
+                                                      <span className={`text-[8px] uppercase tracking-widest transition-colors ${isModified ? 'text-amber-600 font-black' : 'text-slate-400'}`}>
+                                                        {isModified ? 'CUSTOMIZED PROTOCOL' : q.category}
+                                                      </span>
+                                                      {isModified && (
+                                                        <button 
+                                                          onClick={() => {
+                                                            const copy = [...formData.questionCollections];
+                                                            const { [q.id]: _, ...remaining } = copy[idx].overrides;
+                                                            copy[idx].overrides = remaining;
+                                                            setFormData({...formData, questionCollections: copy});
+                                                          }}
+                                                          className="text-[8px] font-black uppercase text-amber-600 hover:underline flex items-center gap-1"
+                                                        >
+                                                           Reset to Template
+                                                        </button>
+                                                      )}
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              );
+                                            })}
+                                          </div>
+
+                                          {/* Custom Questions Header */}
+                                          <div className="relative py-4">
+                                            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-100"></div></div>
+                                            <div className="relative flex justify-center">
+                                              <button 
+                                                onClick={() => {
+                                                    const copy = [...formData.questionCollections];
+                                                    copy[idx].customQuestions = [
+                                                      ...copy[idx].customQuestions,
+                                                      { id: `custom-${Date.now()}`, text: '', category: 'New Ad-hoc' }
+                                                    ];
+                                                    setFormData({...formData, questionCollections: copy});
+                                                }}
+                                                className="bg-white px-4 text-indigo-600 text-[9px] font-black uppercase tracking-[0.2em] border border-slate-100 rounded-full py-1.5 shadow-sm hover:shadow-md transition-all active:scale-95"
+                                              >
+                                                + Add Ad-hoc Benchmark
+                                              </button>
+                                            </div>
+                                          </div>
+
+                                          {/* Custom Questions List */}
+                                          <div className="grid gap-3">
+                                            {qc.customQuestions.map((q, qIdx) => (
+                                              <div key={q.id} className="p-5 bg-purple-50/10 rounded-3xl flex gap-4 border border-purple-100 shadow-sm animate-in slide-in-from-left-4">
+                                                <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center shrink-0">
+                                                   <Plus className="w-4 h-4 text-purple-600" />
+                                                </div>
+                                                <div className="flex-1 space-y-3">
+                                                  <textarea 
+                                                    value={q.text}
+                                                    onChange={e => {
+                                                      const copy = [...formData.questionCollections];
+                                                      copy[idx].customQuestions[qIdx].text = e.target.value;
+                                                      setFormData({...formData, questionCollections: copy});
+                                                    }}
+                                                    className="w-full bg-transparent border-none p-0 text-[11px] font-bold text-slate-700 focus:ring-0 placeholder:text-slate-300 min-h-[50px] resize-none"
+                                                    placeholder="Describe custom performance criteria..."
+                                                  />
+                                                  <div className="flex justify-between items-center bg-white/50 p-2 rounded-xl border border-purple-50">
+                                                    <input 
+                                                      value={q.category}
+                                                      onChange={e => {
+                                                        const copy = [...formData.questionCollections];
+                                                        copy[idx].customQuestions[qIdx].category = e.target.value;
+                                                        setFormData({...formData, questionCollections: copy});
+                                                      }}
+                                                      className="text-[8px] font-black uppercase text-purple-600 bg-purple-100/50 px-2 py-1 rounded-md border-none focus:ring-0 max-w-[100px]"
+                                                    />
+                                                    <button 
+                                                      onClick={() => {
+                                                        const copy = [...formData.questionCollections];
+                                                        copy[idx].customQuestions = copy[idx].customQuestions.filter(item => item.id !== q.id);
+                                                        setFormData({...formData, questionCollections: copy});
+                                                      }}
+                                                      className="text-slate-300 hover:text-red-500 p-1 transition-colors"
+                                                    >
+                                                      <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            ))}
+                                          </div>
+                                       </div>
+                                     </motion.div>
+                                   )}
+                                 </AnimatePresence>
+                               </div>
+                             </div>
+                          </div>
+                        );
+                      })}
                    </div>
                 </section>
               </div>

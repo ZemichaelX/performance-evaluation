@@ -94,39 +94,89 @@ export const EvaluationHistory = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Competency Assessment</p>
-                      <div className="grid gap-4">
-                        {sub.scores.map((score: any, idx: number) => {
-                          const framework = useStore.getState().competencyFrameworks.find(f => f.questions.some(q => q.id === score.questionId));
-                          const question = framework?.questions.find(q => q.id === score.questionId);
-                          
-                          return (
-                            <div key={idx} className="p-5 bg-slate-50 border border-slate-100 rounded-2xl group-hover:bg-white group-hover:shadow-sm transition-all">
-                              <div className="flex justify-between items-start gap-4 mb-3">
-                                <span className="text-sm text-slate-700 font-bold leading-tight">
-                                  {question?.text || `Metric Identifier ${idx + 1}`}
-                                </span>
-                                <span className="text-[10px] font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md uppercase">
-                                  {question?.category || 'Strategic'}
-                                </span>
+                    <div className="space-y-8">
+                      <div>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Competency Assessment</p>
+                        <div className="grid gap-4">
+                          {sub.scores.map((score: any, idx: number) => {
+                            const framework = useStore.getState().competencyFrameworks.find(f => f.questions.some(q => q.id === score.questionId));
+                            const question = framework?.questions.find(q => q.id === score.questionId);
+                            
+                            return (
+                              <div key={idx} className="p-5 bg-slate-50 border border-slate-100 rounded-2xl group-hover:bg-white group-hover:shadow-sm transition-all">
+                                <div className="flex justify-between items-start gap-4 mb-3">
+                                  <span className="text-[11px] text-slate-700 font-bold leading-tight">
+                                    {question?.text || `Metric Identifier ${idx + 1}`}
+                                  </span>
+                                  <span className="text-[9px] font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md uppercase shrink-0">
+                                    {question?.category || 'Strategic'}
+                                  </span>
+                                </div>
+                                <div className="flex gap-1.5">
+                                  {[1, 2, 3, 4, 5].map((s) => (
+                                    <div 
+                                      key={s} 
+                                      className={`h-1 flex-1 rounded-full transition-all duration-500 ${
+                                        s <= score.score 
+                                          ? 'bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.3)]' 
+                                          : 'bg-slate-200'
+                                      }`}
+                                    />
+                                  ))}
+                                </div>
                               </div>
-                              <div className="flex gap-1.5">
-                                {[1, 2, 3, 4, 5].map((s) => (
-                                  <div 
-                                    key={s} 
-                                    className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
-                                      s <= score.score 
-                                        ? 'bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.3)]' 
-                                        : 'bg-slate-200'
-                                    }`}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
+
+                      {/* Qualitative Findings */}
+                      {sub.improvementAreas && (
+                        <div className="pt-6 border-t border-slate-50 space-y-3">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">4. Priority Improvement Areas</p>
+                          <div className="bg-amber-50/30 p-5 rounded-2xl border border-amber-100/50 text-slate-600 font-bold text-xs leading-relaxed italic">
+                            "{sub.improvementAreas}"
+                          </div>
+                        </div>
+                      )}
+
+                      {sub.nextGoals && (
+                        <div className="pt-6 border-t border-slate-50 space-y-3">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">5. Goals For Next Review</p>
+                          <div className="bg-indigo-50/30 p-5 rounded-2xl border border-indigo-100/50 text-slate-600 font-bold text-xs leading-relaxed italic">
+                            "{sub.nextGoals}"
+                          </div>
+                        </div>
+                      )}
+
+                      {sub.employeeComments && (
+                        <div className="pt-6 border-t border-slate-50 space-y-3">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">6. Employee Comments</p>
+                          <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 text-slate-600 font-bold text-xs leading-relaxed">
+                            {sub.employeeComments}
+                          </div>
+                        </div>
+                      )}
+
+                      {sub.signatures && (
+                        <div className="pt-6 border-t border-slate-50">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">7. Authentication Signatures</p>
+                          <div className="grid grid-cols-2 gap-3">
+                            {sub.signatures.employee && (
+                              <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                                <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest mb-1">Employee</p>
+                                <p className="text-[11px] font-black text-slate-900 border-b border-slate-200 pb-1 italic font-serif">{sub.signatures.employee}</p>
+                              </div>
+                            )}
+                            {sub.signatures.supervisor && (
+                              <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                                <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest mb-1">Supervisor</p>
+                                <p className="text-[11px] font-black text-slate-900 border-b border-slate-200 pb-1 italic font-serif">{sub.signatures.supervisor}</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
