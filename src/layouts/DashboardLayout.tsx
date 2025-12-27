@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useStore } from '../store/useStore';
-import { useNavigate } from 'react-router-dom';
-import { LogOut, LayoutDashboard, History, Settings, Users, FileText } from 'lucide-react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { LogOut, ChevronDown } from 'lucide-react';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -11,74 +11,112 @@ interface DashboardLayoutProps {
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, type }) => {
   const { currentUser, logout } = useStore();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isStrategyOpen, setIsStrategyOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
+  const isTabActive = (path: string) => location.pathname.includes(path);
+
   return (
-    <div className="min-h-screen bg-slate-50 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white fixed h-full z-10 hidden md:flex flex-col">
-        <div className="p-6 border-b border-slate-800">
-          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-            Performance Evaluation
-          </h1>
-          <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider">
-            {type === 'admin' ? 'Admin Console' : 'Employee Portal'}
-          </p>
+    <div className="min-h-screen bg-white">
+      {/* Top Navigation Bar - Elegant Light Theme */}
+      <nav className="bg-white/80 backdrop-blur-xl sticky top-0 z-50 px-8 h-20 flex items-center justify-between border-b border-slate-100/60 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)]">
+        <div className="flex items-center gap-10">
+          {/* Strategy Dropdown - Light Theme */}
+          <div className="relative">
+            <button 
+              onClick={() => setIsStrategyOpen(!isStrategyOpen)}
+              className="flex items-center gap-3 bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all border border-slate-200/50 group"
+            >
+              <span className="text-xs font-black text-slate-500 uppercase tracking-widest">Strategy</span>
+              <span className="text-sm font-bold text-indigo-600">2024/2027</span>
+              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isStrategyOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {isStrategyOpen && (
+              <div className="absolute top-full left-0 mt-3 w-56 bg-white border border-slate-100 rounded-2xl shadow-2xl py-3 z-50 animate-in fade-in zoom-in-95 duration-200">
+                <p className="px-5 py-2 text-xs font-black text-slate-400 uppercase tracking-widest">Select Strategy</p>
+                <button className="w-full text-left px-5 py-2.5 text-sm hover:bg-slate-50 font-bold text-indigo-600 flex items-center justify-between">
+                  Strategy 2024/2027
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-600"></div>
+                </button>
+                <button className="w-full text-left px-5 py-2.5 text-sm hover:bg-slate-50 text-slate-500 font-medium">Strategy 2021/2023</button>
+              </div>
+            )}
+          </div>
+
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-200 flex-shrink-0">P</div>
+            <span className="text-xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">
+              Performance<span className="text-indigo-600">.</span>
+            </span>
+          </Link>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
+        {/* User Profile Info - Light Theme */}
+        <div className="flex items-center gap-6">
+          <div className="text-right hidden sm:block">
+            <p className="text-sm font-black text-slate-900">{currentUser?.name}</p>
+            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">{currentUser?.department}</p>
+          </div>
+          <div className="flex items-center gap-2 group relative">
+             <div className="relative">
+                <img src={currentUser?.avatar} alt="Profile" className="w-11 h-11 rounded-2xl border-2 border-white shadow-md group-hover:shadow-indigo-100 transition-all duration-300 object-cover" />
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+             </div>
+             <div className="absolute top-full right-0 mt-3 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                <div className="bg-white border border-slate-100 rounded-2xl shadow-2xl py-3 w-48 overflow-hidden">
+                   <div className="px-5 py-3 border-b border-slate-50 mb-1">
+                      <p className="text-xs font-bold text-slate-900 truncate">{currentUser?.email}</p>
+                   </div>
+                   <button onClick={handleLogout} className="w-full text-left px-5 py-3 text-sm hover:bg-red-50 flex items-center gap-3 text-red-600 font-bold transition-colors">
+                      <LogOut className="w-4 h-4" /> Sign Out
+                   </button>
+                </div>
+             </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Primary Navigation Tabs - Light Theme */}
+      <div className="bg-white/50 border-b border-slate-100/60 sticky top-20 z-40 px-8">
+        <div className="max-w-7xl mx-auto flex gap-10">
           {type === 'employee' ? (
             <>
-              <NavItem to="/employee/dashboard" icon={<LayoutDashboard />} label="Overview" active />
-              <NavItem to="/employee/history" icon={<History />} label="Evaluation History" />
-              <NavItem to="/employee/profile" icon={<Settings />} label="My Profile" />
+              <TabLink to="/employee/dashboard" active={isTabActive('/employee/dashboard')}>Dashboard</TabLink>
+              <TabLink to="/employee/history" active={isTabActive('/employee/history')}>Evaluation History</TabLink>
             </>
           ) : (
-             <>
-              <NavItem to="/admin/dashboard" icon={<LayoutDashboard />} label="Dashboard" active />
-              <NavItem to="/admin/evaluations" icon={<FileText />} label="Evaluations" />
-              <NavItem to="/admin/employees" icon={<Users />} label="Employees" />
+            <>
+              <TabLink to="/admin/dashboard" active={isTabActive('/admin/dashboard')}>Admin Console</TabLink>
+              <TabLink to="/admin/create-cycle" active={isTabActive('/admin/create-cycle')}>Cycle Management</TabLink>
+              <TabLink to="/admin/management" active={isTabActive('/admin/management')}>System Control</TabLink>
             </>
           )}
-        </nav>
-
-        <div className="p-4 border-t border-slate-800">
-          <div className="flex items-center gap-3 mb-4 px-2">
-            <img src={currentUser?.avatar} alt="Profile" className="w-8 h-8 rounded-full border border-slate-600" />
-            <div className="overflow-hidden">
-              <p className="text-sm font-medium truncate">{currentUser?.name}</p>
-              <p className="text-xs text-slate-400 truncate">{currentUser?.department}</p>
-            </div>
-          </div>
-          <button 
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </button>
         </div>
-      </aside>
+      </div>
 
       {/* Main Content */}
-      <main className="flex-1 md:ml-64 p-8">
+      <main className="p-10 max-w-[1600px] mx-auto">
         {children}
       </main>
     </div>
   );
 };
 
-const NavItem = ({ to, icon, label, active }: { to: string, icon: React.ReactNode, label: string, active?: boolean }) => (
-  <a href={to} className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-    active 
-      ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' 
-      : 'text-slate-400 hover:text-white hover:bg-slate-800'
-  }`}>
-    {React.cloneElement(icon as React.ReactElement, { className: 'w-5 h-5' })}
-    {label}
-  </a>
+const TabLink = ({ to, children, active }: { to: string, children: React.ReactNode, active: boolean }) => (
+  <Link 
+    to={to} 
+    className={`py-4 text-sm font-bold border-b-2 transition-all ${
+      active 
+        ? 'border-blue-600 text-blue-600' 
+        : 'border-transparent text-slate-500 hover:text-slate-700'
+    }`}
+  >
+    {children}
+  </Link>
 );

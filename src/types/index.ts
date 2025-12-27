@@ -9,22 +9,38 @@ export interface User {
   email: string;
 }
 
-export interface KPI {
+export interface Objective {
   id: string;
+  userId: string;
+  cycleId: string;
   title: string;
   description: string;
+  weight: number; // Weight within its category (e.g., 25% of "Own" weight)
   type: 'own' | 'shared';
-  weight: number;
-  score: number; // 0-100
+}
+
+export interface KPI {
+  id: string;
+  objectiveId: string;
+  title: string;
+  description: string;
+  weight: number; // Weight within the objective (Total KPIs in objective = 100%)
+  score: number; // 0-100 (The "result" mentioned by user)
   target: number;
   achieved: number;
-  department?: string; // For shared KPIs
 }
 
 export interface CompetencyQuestion {
   id: string;
-  category: 'behavioral' | 'technical' | 'leadership';
+  category: string; // behavioral, technical, etc., but now flexible
   text: string;
+}
+
+export interface CompetencyFramework {
+  id: string;
+  name: string;
+  description: string;
+  questions: CompetencyQuestion[];
 }
 
 export interface CompetencyScore {
@@ -41,6 +57,7 @@ export interface EvaluationSubmission {
   status: 'pending' | 'submitted';
   submittedAt?: string;
   scores: CompetencyScore[];
+  formId?: string; // Differentiates forms for peer vs supervisor
 }
 
 export interface EvaluationCycle {
@@ -59,4 +76,5 @@ export interface EvaluationCycle {
     technical: boolean;
     leadership: boolean;
   };
+  customCompetencyFrameworkIds?: string[];
 }

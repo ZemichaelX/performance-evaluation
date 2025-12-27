@@ -23,10 +23,10 @@ export const Login = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4">
       <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+        <h1 className="text-4xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2 tracking-tight">
           Performance Evaluation
         </h1>
-        <p className="text-slate-500">Evaluation Management System</p>
+        <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Evaluation Management System</p>
       </div>
 
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-100">
@@ -82,7 +82,7 @@ export const Login = () => {
           )}
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+        <div className="mt-8 pt-6 border-t border-slate-100 text-center text-[10px] font-black uppercase tracking-widest text-slate-300 flex items-center justify-center gap-2">
           <Lock className="w-3 h-3" />
           Secure Evaluation Environment
         </div>

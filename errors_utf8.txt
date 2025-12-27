@@ -1,0 +1,17 @@
+﻿src/components/EvaluationModal.tsx(4,1): error TS6133: 'CompetencyQuestion' is declared but its value is never read.
+src/components/PeerSelection.tsx(3,10): error TS6133: 'Users' is declared but its value is never read.
+src/components/PeerSelection.tsx(10,61): error TS6133: 'cycleId' is declared but its value is never read.
+src/pages/admin/AdminDashboard.tsx(225,57): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'className' does not exist in type 'Partial<unknown> & Attributes'.
+src/pages/admin/AdminDashboard.tsx(225,79): error TS2571: Object is of type 'unknown'.
+src/pages/admin/AdminDashboard.tsx(246,39): error TS6133: 'status' is declared but its value is never read.
+src/pages/admin/CreateCycle.tsx(4,24): error TS6133: 'ChevronLeft' is declared but its value is never read.
+src/pages/admin/CreateCycle.tsx(4,57): error TS6133: 'User' is declared but its value is never read.
+src/pages/admin/CreateCycle.tsx(4,100): error TS6133: 'Users' is declared but its value is never read.
+src/pages/admin/CreateCycle.tsx(4,107): error TS6133: 'Sliders' is declared but its value is never read.
+src/pages/admin/Management.tsx(4,15): error TS6196: 'CompetencyFramework' is declared but never used.
+src/pages/admin/Management.tsx(209,31): error TS6133: 'questions' is declared but its value is never read.
+src/pages/employee/EmployeeDashboard.tsx(3,30): error TS6133: 'CheckCircle2' is declared but its value is never read.
+src/pages/employee/EmployeeDashboard.tsx(3,51): error TS6133: 'ChevronDown' is declared but its value is never read.
+src/pages/employee/EmployeeDashboard.tsx(3,64): error TS6133: 'ChevronRight' is declared but its value is never read.

@@ -1,84 +1,119 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { Calendar, User, Users, UserCheck } from 'lucide-react';
+import { Calendar, User, Users, UserCheck, CheckCircle2 } from 'lucide-react';
 import { format } from 'date-fns';
 
 export const EvaluationHistory = () => {
-  const { currentUser, submissions } = useStore();
+  const { currentUser, submissions, cycles } = useStore();
   const [activeTab, setActiveTab] = useState<'self' | 'peer' | 'supervisor'>('self');
 
-  // Filter submissions
-  const mySubmissions = submissions.filter(s => s.evaluateeId === currentUser?.id);
-  const displayedSubmissions = mySubmissions.filter(s => s.type === activeTab);
+  const mySubmissions = submissions.filter(s => s.evaluateeId === currentUser?.id && s.type === activeTab);
+  
+  const groupedByCycle = cycles.reduce((acc: any, cycle) => {
+    const cycleSubmissions = mySubmissions.filter(s => s.cycleId === cycle.id);
+    if (cycleSubmissions.length > 0) {
+      acc.push({ ...cycle, items: cycleSubmissions });
+    }
+    return acc;
+  }, []);
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <header>
-        <h1 className="text-3xl font-bold text-slate-800">Evaluation History</h1>
-        <p className="text-slate-500 mt-1">Review your past performance records and feedback.</p>
+    <div className="max-w-6xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+        <div>
+          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-2">Evaluation History</h1>
+          <p className="text-slate-500 font-semibold tracking-tight">Access your full performance architecture and historical feedback.</p>
+        </div>
+
+        <div className="flex p-1.5 bg-slate-50 border border-slate-100 rounded-2xl">
+          <TabButton 
+            active={activeTab === 'self'} 
+            onClick={() => setActiveTab('self')} 
+            icon={<User className="w-4 h-4" />} 
+            label="Self" 
+          />
+          <TabButton 
+            active={activeTab === 'peer'} 
+            onClick={() => setActiveTab('peer')} 
+            icon={<Users className="w-4 h-4" />} 
+            label="Peers" 
+          />
+          <TabButton 
+            active={activeTab === 'supervisor'} 
+            onClick={() => setActiveTab('supervisor')} 
+            icon={<UserCheck className="w-4 h-4" />} 
+            label="Supervisor" 
+          />
+        </div>
       </header>
 
-      {/* Tabs */}
-      <div className="flex p-1 bg-slate-100 rounded-xl w-fit">
-        <TabButton 
-          active={activeTab === 'self'} 
-          onClick={() => setActiveTab('self')} 
-          icon={<User className="w-4 h-4" />} 
-          label="Self Evaluations" 
-        />
-        <TabButton 
-          active={activeTab === 'peer'} 
-          onClick={() => setActiveTab('peer')} 
-          icon={<Users className="w-4 h-4" />} 
-          label="Peer Reviews" 
-        />
-        <TabButton 
-          active={activeTab === 'supervisor'} 
-          onClick={() => setActiveTab('supervisor')} 
-          icon={<UserCheck className="w-4 h-4" />} 
-          label="Supervisor Reviews" 
-        />
-      </div>
-
-      {/* Content */}
-      <div className="space-y-4">
-        {displayedSubmissions.length === 0 ? (
-          <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-            <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <h3 className="text-lg font-medium text-slate-900">No Records Found</h3>
-            <p className="text-slate-500">You haven't received any {activeTab} evaluations yet.</p>
+      <div className="space-y-16">
+        {groupedByCycle.length === 0 ? (
+          <div className="text-center py-24 bg-white rounded-[32px] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Calendar className="w-10 h-10 text-slate-200" />
+            </div>
+            <h3 className="text-xl font-extrabold text-slate-900">Historical Records Void</h3>
+            <p className="text-slate-400 font-semibold mt-2">No {activeTab} evaluations were found in the historical database.</p>
           </div>
         ) : (
-          displayedSubmissions.map(sub => (
-            <div key={sub.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                    <span className="text-xs font-bold tracking-wider text-green-600 bg-green-50 px-2 py-1 rounded-full uppercase">
-                       Submitted
-                    </span>
-                    <h3 className="font-bold text-lg text-slate-900 mt-2">Evaluation Record</h3>
-                    <p className="text-sm text-slate-500">
-                      Submitted on {sub.submittedAt ? format(new Date(sub.submittedAt), 'PPP') : 'N/A'}
-                    </p>
-                </div>
-                <div className="text-right">
-                    <p className="text-sm text-slate-400">Total Score</p>
-                    <p className="text-2xl font-bold text-indigo-600">
-                        {(sub.scores.reduce((a, b) => a + b.score, 0) / sub.scores.length).toFixed(1)} <span className="text-sm text-slate-400 font-normal">/ 5</span>
-                    </p>
-                </div>
+          groupedByCycle.map((group: any) => (
+            <div key={group.id} className="space-y-6">
+              <div className="flex items-center gap-4 px-2">
+                 <div className="h-0.5 flex-1 bg-slate-50"></div>
+                 <div className="flex items-center gap-3">
+                   <h2 className="text-sm font-extrabold text-slate-400 uppercase tracking-[0.2em]">{group.title}</h2>
+                   <span className="text-[12px] font-extrabold bg-indigo-50 text-indigo-600 px-3 py-1 rounded-lg uppercase">
+                     {group.type}
+                   </span>
+                 </div>
+                 <div className="h-0.5 flex-1 bg-slate-50"></div>
               </div>
 
-              {/* Read-only Question View */}
-              <div className="grid md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                  {sub.scores.map((score, idx) => (
-                      <div key={idx} className="flex justify-between items-center p-2 bg-white rounded-lg border border-slate-100">
-                          <span className="text-sm text-slate-700 font-medium">Question {idx + 1}</span>
-                          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 font-bold text-sm">
-                              {score.score}
+              <div className="grid md:grid-cols-2 gap-8">
+                {group.items.map((sub: any) => (
+                  <div key={sub.id} className="bg-white p-8 rounded-[28px] border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.01)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:-translate-y-1 transition-all duration-500 group">
+                    <div className="flex justify-between items-start mb-8">
+                      <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <CheckCircle2 className="w-4 h-4 text-green-500" />
+                          <span className="text-xs font-extrabold tracking-widest text-slate-400 uppercase">
+                            Authenticated Record
                           </span>
+                        </div>
+                        <h3 className="font-extrabold text-xl text-slate-900 tracking-tight">Evaluation Feedback</h3>
+                        <p className="text-xs font-bold text-slate-400 mt-1">
+                          Processed on {sub.submittedAt ? format(new Date(sub.submittedAt), 'MMMM d, yyyy') : 'N/A'}
+                        </p>
                       </div>
-                  ))}
+                      <div className="p-4 bg-indigo-50/50 rounded-2xl text-center min-w-[80px]">
+                        <p className="text-xs text-indigo-400 uppercase font-extrabold tracking-widest mb-1">Score</p>
+                        <p className="text-2xl font-extrabold text-indigo-600 tracking-tighter">
+                          {(sub.scores.reduce((a: any, b: any) => a + b.score, 0) / sub.scores.length).toFixed(1)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <p className="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-4">Competency Breakdown</p>
+                      <div className="grid gap-3">
+                        {sub.scores.map((score: any, idx: number) => (
+                          <div key={idx} className="flex items-center justify-between p-3.5 bg-slate-50/50 rounded-xl border border-slate-100/50 group-hover:bg-slate-50 transition-colors">
+                            <span className="text-sm text-slate-700 font-extrabold">Metric Identifier {idx + 1}</span>
+                            <div className="flex gap-1">
+                              {[1, 2, 3, 4, 5].map((s) => (
+                                <div 
+                                  key={s} 
+                                  className={`w-1.5 h-1.5 rounded-full ${s <= score.score ? 'bg-indigo-500' : 'bg-slate-200'}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ))
@@ -91,8 +126,10 @@ export const EvaluationHistory = () => {
 const TabButton = ({ active, onClick, icon, label }: any) => (
   <button 
     onClick={onClick}
-    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-      active ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+    className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-extrabold transition-all ${
+      active 
+        ? 'bg-white text-indigo-600 shadow-md ring-1 ring-slate-100' 
+        : 'text-slate-400 hover:text-slate-600 hover:bg-white/50'
     }`}
   >
     {icon}

@@ -5,6 +5,7 @@ import { EmployeeDashboard } from './pages/employee/EmployeeDashboard';
 import { EvaluationHistory } from './pages/employee/History';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { CreateCycle } from './pages/admin/CreateCycle';
+import { Management } from './pages/admin/Management';
 import { DashboardLayout } from './layouts/DashboardLayout';
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
               <Routes>
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="create-cycle" element={<CreateCycle />} />
+                <Route path="management" element={<Management />} />
                 <Route path="*" element={<Navigate to="dashboard" />} />
               </Routes>
             </DashboardLayout>
