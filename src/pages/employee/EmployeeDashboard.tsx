@@ -29,12 +29,6 @@ export const EmployeeDashboard = () => {
                Start Self-Evaluation
              </button>
            )}
-           <button 
-             onClick={() => setIsPeerSelectionOpen(true)}
-             className="bg-white border border-slate-200 text-slate-900 px-8 py-4 rounded-2xl font-black hover:bg-slate-50 transition-all"
-           >
-             Nominate Peers
-           </button>
         </div>
       </header>
 
@@ -42,7 +36,7 @@ export const EmployeeDashboard = () => {
         <section className="lg:col-span-8 space-y-10">
           <div className="grid md:grid-cols-2 gap-6">
             <StatCard label="Pipeline Status" value={selfSubmitted ? "Submitted" : "Pending Action"} icon={<Clock className="text-orange-500" />} />
-            <StatCard label="KPI Alignment" value="94.2%" icon={<Target className="text-indigo-500" />} />
+            <StatCard label="KPI Alignment" value="86.0%" icon={<Target className="text-indigo-500" />} />
           </div>
 
           <div className="bg-white border border-slate-100 rounded-[40px] p-10 shadow-[0_8px_40px_rgba(0,0,0,0.02)]">
@@ -76,8 +70,12 @@ export const EmployeeDashboard = () => {
                           <p className="text-xs text-slate-400 font-bold mt-0.5">{kpi.description}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Target</p>
-                          <p className="text-sm font-black text-indigo-600">85%+</p>
+                          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Achievement</p>
+                          <p className="text-sm font-black text-indigo-600">{kpi.score}%</p>
+                        </div>
+                        <div className="text-right ml-4">
+                          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Weight</p>
+                          <p className="text-sm font-black text-slate-900">{kpi.weight}%</p>
                         </div>
                       </div>
                     ))}
@@ -92,10 +90,10 @@ export const EmployeeDashboard = () => {
           <div className="bg-slate-900 p-8 rounded-[40px] text-white relative overflow-hidden group">
              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500 opacity-20 blur-3xl rounded-full" />
              <h3 className="text-sm font-black text-indigo-300 uppercase tracking-widest mb-4">Performance Score</h3>
-             <div className="text-6xl font-black tracking-tighter mb-2">4.8</div>
-             <p className="text-slate-400 text-sm font-bold">Top 5% of Department</p>
+             <div className="text-6xl font-black tracking-tighter mb-2">4.3</div>
+             <p className="text-slate-400 text-sm font-bold">Top 14% of Department</p>
              <div className="w-full h-1.5 bg-white/10 rounded-full mt-8 overflow-hidden">
-                <div className="bg-indigo-400 h-full w-[96%] rounded-full shadow-[0_0_15px_rgba(129,140,248,0.5)]" />
+                <div className="bg-indigo-400 h-full w-[86%] rounded-full shadow-[0_0_15px_rgba(129,140,248,0.5)]" />
              </div>
           </div>
 
@@ -106,7 +104,7 @@ export const EmployeeDashboard = () => {
              </h3>
              <div className="space-y-8 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-50">
                <StatusItem label="Self Evaluation" status={selfSubmitted ? "completed" : "active"} />
-               <StatusItem label="Peer Nomination" status="pending" />
+               <StatusItem label="Peer Feedback" status="pending" />
                <StatusItem label="Final Review" status="locked" />
              </div>
           </div>

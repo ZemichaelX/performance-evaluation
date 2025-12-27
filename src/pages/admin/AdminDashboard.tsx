@@ -13,8 +13,14 @@ export const AdminDashboard = () => {
   const employees = users.filter((u: User) => u.role === 'employee');
   const selectedCycle = cycles.find(c => c.id === selectedCycleId);
   
-  const totalExpected = activeCycles.length * employees.length;
-  const progress = totalExpected ? (submissions.length / totalExpected) * 100 : 0;
+  // Calculate accurate progress based on orchestration (Self + Peers + Supervisor)
+  const totalSubmissionsExpected = activeCycles.reduce((acc) => {
+    // For each cycle, we expect: Evaluatees * (1 Self + ~3 Peers + 1 Supervisor)
+    // Using a baseline of 5 expected entities per evaluatee for aggregate intelligence
+    return acc + (employees.length * 5); 
+  }, 0);
+  
+  const progress = totalSubmissionsExpected ? (submissions.length / totalSubmissionsExpected) * 100 : 0;
 
   if (selectedCycleId && selectedCycle) {
     return (

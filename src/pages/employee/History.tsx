@@ -94,22 +94,38 @@ export const EvaluationHistory = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-3">
-                      <p className="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-4">Competency Breakdown</p>
-                      <div className="grid gap-3">
-                        {sub.scores.map((score: any, idx: number) => (
-                          <div key={idx} className="flex items-center justify-between p-3.5 bg-slate-50/50 rounded-xl border border-slate-100/50 group-hover:bg-slate-50 transition-colors">
-                            <span className="text-sm text-slate-700 font-extrabold">Metric Identifier {idx + 1}</span>
-                            <div className="flex gap-1">
-                              {[1, 2, 3, 4, 5].map((s) => (
-                                <div 
-                                  key={s} 
-                                  className={`w-1.5 h-1.5 rounded-full ${s <= score.score ? 'bg-indigo-500' : 'bg-slate-200'}`}
-                                />
-                              ))}
+                    <div className="space-y-4">
+                      <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Competency Assessment</p>
+                      <div className="grid gap-4">
+                        {sub.scores.map((score: any, idx: number) => {
+                          const framework = useStore.getState().competencyFrameworks.find(f => f.questions.some(q => q.id === score.questionId));
+                          const question = framework?.questions.find(q => q.id === score.questionId);
+                          
+                          return (
+                            <div key={idx} className="p-5 bg-slate-50 border border-slate-100 rounded-2xl group-hover:bg-white group-hover:shadow-sm transition-all">
+                              <div className="flex justify-between items-start gap-4 mb-3">
+                                <span className="text-sm text-slate-700 font-bold leading-tight">
+                                  {question?.text || `Metric Identifier ${idx + 1}`}
+                                </span>
+                                <span className="text-[10px] font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md uppercase">
+                                  {question?.category || 'Strategic'}
+                                </span>
+                              </div>
+                              <div className="flex gap-1.5">
+                                {[1, 2, 3, 4, 5].map((s) => (
+                                  <div 
+                                    key={s} 
+                                    className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+                                      s <= score.score 
+                                        ? 'bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.3)]' 
+                                        : 'bg-slate-200'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   </div>

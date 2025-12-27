@@ -197,7 +197,7 @@ export const CreateCycle = () => {
                           <img src={evaluatee?.avatar} alt="" className="w-10 h-10 rounded-xl object-cover" />
                           <div className="text-left">
                             <p className="font-black text-slate-900">{evaluatee?.name}</p>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Target Entity</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-indigo-500 animate-pulse">Configure Evaluators</p>
                           </div>
                         </div>
                         <div className="flex gap-4 items-center">
@@ -223,24 +223,28 @@ export const CreateCycle = () => {
                             <div className="p-8 bg-slate-50/50 border-t border-slate-100 grid md:grid-cols-2 gap-10">
                               <section className="space-y-4 text-left">
                                 <h4 className="text-xs font-black uppercase tracking-widest text-indigo-600 flex items-center gap-2">
-                                   <Users className="w-3 h-3" /> Nominate Peers
+                                   <Users className="w-3 h-3" /> Assign Peers
                                 </h4>
                                 <div className="grid grid-cols-2 gap-2">
-                                  {users.filter(u => u.id !== eId && u.role === 'employee').map(u => {
-                                    const selected = assignment.peerIds.includes(u.id);
-                                    return (
-                                      <button 
-                                        key={u.id}
-                                        onClick={() => updateAssignment(eId, 'peer', u.id)}
-                                        className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
-                                          selected ? 'bg-indigo-600 border-indigo-600 text-white shadow-md' : 'bg-white border-slate-100 hover:border-indigo-200'
-                                        }`}
-                                      >
-                                        <img src={u.avatar} className="w-6 h-6 rounded-lg object-cover" />
-                                        <span className="text-[11px] font-black truncate">{u.name}</span>
-                                      </button>
-                                    );
-                                  })}
+                                  {users.filter(u => u.id !== eId && u.role === 'employee').length === 0 ? (
+                                    <p className="col-span-2 text-[10px] font-bold text-slate-400 italic">No eligible peers found.</p>
+                                  ) : (
+                                    users.filter(u => u.id !== eId && u.role === 'employee').map(u => {
+                                      const selected = assignment.peerIds.includes(u.id);
+                                      return (
+                                        <button 
+                                          key={u.id}
+                                          onClick={() => updateAssignment(eId, 'peer', u.id)}
+                                          className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
+                                            selected ? 'bg-indigo-600 border-indigo-600 text-white shadow-md' : 'bg-white border-slate-100 hover:border-indigo-200'
+                                          }`}
+                                        >
+                                          <img src={u.avatar} className="w-6 h-6 rounded-lg object-cover" />
+                                          <span className="text-[11px] font-black truncate">{u.name}</span>
+                                        </button>
+                                      );
+                                    })
+                                  )}
                                 </div>
                               </section>
                               
@@ -249,21 +253,25 @@ export const CreateCycle = () => {
                                    <UserCheck className="w-3 h-3" /> Assign Supervisor
                                 </h4>
                                 <div className="grid grid-cols-2 gap-2">
-                                  {users.filter(u => u.role === 'admin' || u.role === 'manager').map(u => {
-                                    const selected = assignment.supervisorIds.includes(u.id);
-                                    return (
-                                      <button 
-                                        key={u.id}
-                                        onClick={() => updateAssignment(eId, 'supervisor', u.id)}
-                                        className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
-                                          selected ? 'bg-orange-500 border-orange-500 text-white shadow-md' : 'bg-white border-slate-100 hover:border-orange-200'
-                                        }`}
-                                      >
-                                        <img src={u.avatar} className="w-6 h-6 rounded-lg object-cover" />
-                                        <span className="text-[11px] font-black truncate">{u.name}</span>
-                                      </button>
-                                    );
-                                  })}
+                                  {users.filter(u => u.role === 'admin' || u.role === 'manager').length === 0 ? (
+                                    <p className="col-span-2 text-[10px] font-bold text-slate-400 italic">No supervisors available.</p>
+                                  ) : (
+                                    users.filter(u => u.role === 'admin' || u.role === 'manager').map(u => {
+                                      const selected = assignment.supervisorIds.includes(u.id);
+                                      return (
+                                        <button 
+                                          key={u.id}
+                                          onClick={() => updateAssignment(eId, 'supervisor', u.id)}
+                                          className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
+                                            selected ? 'bg-orange-500 border-orange-500 text-white shadow-md' : 'bg-white border-slate-100 hover:border-orange-200'
+                                          }`}
+                                        >
+                                          <img src={u.avatar} className="w-6 h-6 rounded-lg object-cover" />
+                                          <span className="text-[11px] font-black truncate">{u.name}</span>
+                                        </button>
+                                      );
+                                    })
+                                  )}
                                 </div>
                               </section>
                             </div>
