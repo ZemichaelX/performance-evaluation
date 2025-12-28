@@ -7,6 +7,9 @@ export interface User {
   department: string;
   avatar: string;
   email: string;
+  phone?: string;
+  status?: 'active' | 'deactivated';
+  employedOn?: string;
 }
 
 export interface Objective {

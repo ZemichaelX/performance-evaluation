@@ -4,7 +4,7 @@ import { Login } from './pages/Login';
 import { EmployeeDashboard } from './pages/employee/EmployeeDashboard';
 import { EvaluationHistory } from './pages/employee/History';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
-import { CreateCycle } from './pages/admin/CreateCycle';
+import { CreateEvaluation } from './pages/admin/CreateEvaluation';
 import { Management } from './pages/admin/Management';
 import { DashboardLayout } from './layouts/DashboardLayout';
 
@@ -40,7 +40,7 @@ function App() {
             <DashboardLayout type="admin">
               <Routes>
                 <Route path="dashboard" element={<AdminDashboard />} />
-                <Route path="create-cycle" element={<CreateCycle />} />
+                <Route path="create-evaluation" element={<CreateEvaluation />} />
                 <Route path="management" element={<Management />} />
                 <Route path="*" element={<Navigate to="dashboard" />} />
               </Routes>

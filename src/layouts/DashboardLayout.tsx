@@ -93,7 +93,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, type
           ) : (
             <>
               <TabLink to="/admin/dashboard" active={isTabActive('/admin/dashboard')}>Admin Console</TabLink>
-              <TabLink to="/admin/create-cycle" active={isTabActive('/admin/create-cycle')}>Cycle Management</TabLink>
+              <TabLink to="/admin/create-evaluation" active={isTabActive('/admin/create-evaluation')}>Evaluation Management</TabLink>
               <TabLink to="/admin/management" active={isTabActive('/admin/management')}>System Control</TabLink>
             </>
           )}

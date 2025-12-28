@@ -45,23 +45,22 @@ export const EmployeeDashboard = () => {
 
       <div className="grid lg:grid-cols-12 gap-10">
         <section className="lg:col-span-8 space-y-10">
-          {/* Glassmorphic Stat Cards */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <StatCard 
-              label="Pipeline Status" 
-              value={selfSubmitted ? "Submitted" : "Pending Action"} 
-              icon={<Clock className="w-6 h-6" />}
-              gradient="from-orange-500 to-amber-500"
-              bgGradient="from-orange-50 to-amber-50"
-            />
-            <StatCard 
-              label="KPI Alignment" 
-              value="86.0%" 
-              icon={<Target className="w-6 h-6" />}
-              gradient="from-indigo-600 to-purple-600"
-              bgGradient="from-indigo-50 to-purple-50"
-            />
-          </div>
+          <div className="flex gap-4">
+        <StatCard 
+          label="Pipeline Status" 
+          value={selfSubmitted ? "Submitted" : "Pending Action"} 
+          icon={<Clock className="w-6 h-6" />}
+          gradient="from-orange-500 to-amber-500"
+          bgGradient="from-orange-50 to-amber-50"
+        />
+        <StatCard 
+          label="KPI Alignment" 
+          value="86.0%" 
+          icon={<Target className="w-6 h-6" />}
+          gradient="from-indigo-600 to-purple-600"
+          bgGradient="from-indigo-50 to-purple-50"
+        />
+      </div>
 
           {/* Strategic Objectives - Enhanced Cards */}
           <div className="relative">
@@ -86,14 +85,14 @@ export const EmployeeDashboard = () => {
                       <div className="flex justify-between items-start mb-6">
                         <div>
                           <div className="flex items-center gap-2 mb-3">
-                            <span className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm ${
+                            <span className={`px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm ${
                               obj.type === 'own' 
                                 ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white' 
                                 : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white'
                             }`}>
-                              {obj.type}
+                              {obj.type === 'own' ? 'Personal' : 'Shared'}
                             </span>
-                            <span className="px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-xl text-xs font-black text-slate-600 border border-slate-200/50">
+                            <span className="px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-xl text-sm font-bold text-slate-600 border border-slate-200/50">
                               Weight: {obj.weight}%
                             </span>
                           </div>
@@ -114,11 +113,11 @@ export const EmployeeDashboard = () => {
                             </div>
                             <div className="flex items-center gap-6">
                               <div className="text-right">
-                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-wider mb-1">Achievement</p>
+                                <p className="text-xs text-slate-500 font-semibold mb-1">Achievement</p>
                                 <p className="text-lg font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{kpi.score}%</p>
                               </div>
                               <div className="text-right">
-                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-wider mb-1">Weight</p>
+                                <p className="text-xs text-slate-500 font-semibold mb-1">Weight</p>
                                 <p className="text-lg font-black text-slate-900">{kpi.weight}%</p>
                               </div>
                             </div>
@@ -127,7 +126,7 @@ export const EmployeeDashboard = () => {
                       </div>
 
                       <div className="flex justify-between items-center px-5 py-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100/50">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600">Sum Aggregate Alignment</span>
+                        <span className="text-xs font-bold text-indigo-600">Sum Aggregate Alignment</span>
                         <span className="text-sm font-black text-indigo-700">
                           KPI Sum: {getObjectKPIs(obj.id).reduce((acc, k) => acc + k.weight, 0)}% / Objective Total: {obj.weight}%
                         </span>
@@ -148,7 +147,7 @@ export const EmployeeDashboard = () => {
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-pink-500 to-purple-600 opacity-20 blur-3xl rounded-full" />
             
             <div className="relative p-8 text-white">
-              <h3 className="text-xs font-black text-indigo-300 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-indigo-300 mb-4 flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
                 Performance Score
               </h3>
@@ -201,7 +200,7 @@ const StatCard = ({ label, value, icon, gradient, bgGradient }: any) => (
         {icon}
       </div>
       <div>
-        <p className="text-slate-500 text-xs font-black uppercase tracking-widest mb-1">{label}</p>
+        <p className="text-slate-500 text-sm font-semibold mb-1">{label}</p>
         <p className="text-3xl font-black bg-gradient-to-r from-slate-900 to-indigo-900 bg-clip-text text-transparent tracking-tight">{value}</p>
       </div>
     </div>
@@ -229,10 +228,10 @@ const StatusItem = ({ label, status }: { label: string, status: 'completed' | 'a
       </div>
       <div className="flex-1">
         <p className={`text-sm font-black transition-colors ${locked ? 'text-slate-400' : 'text-slate-900'}`}>{label}</p>
-        <p className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
+        <p className={`text-xs font-semibold transition-colors ${
           completed ? 'text-emerald-600' : active ? 'text-indigo-600' : 'text-slate-400'
         }`}>
-          {status}
+          {status === 'completed' ? 'Completed' : status === 'active' ? 'Active' : status === 'pending' ? 'Pending' : 'Locked'}
         </p>
       </div>
       {!locked && !completed && (

@@ -28,48 +28,66 @@ const MOCK_USERS: User[] = [
     id: 'emp1',
     name: 'Alex Johnson',
     role: 'employee',
-    department: 'Engineering',
+    department: 'OD',
     email: 'alex@company.com',
+    phone: '+251 911 234 567',
+    status: 'active',
+    employedOn: '2022-03-15',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   },
   {
     id: 'emp2',
     name: 'Jessica Chen',
     role: 'employee',
-    department: 'Engineering',
+    department: 'RMS',
     email: 'jessica@company.com',
+    phone: '+251 922 345 678',
+    status: 'active',
+    employedOn: '2021-07-22',
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   },
   {
     id: 'emp3',
     name: 'Marcus Thorne',
     role: 'employee',
-    department: 'Design',
+    department: 'KSP',
     email: 'marcus@company.com',
+    phone: '+251 933 456 789',
+    status: 'active',
+    employedOn: '2023-01-10',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   },
   {
     id: 'emp4',
     name: 'Amara Okafor',
     role: 'employee',
-    department: 'Design',
+    department: 'F&I',
     email: 'amara@company.com',
+    phone: '+251 944 567 890',
+    status: 'deactivated',
+    employedOn: '2020-11-05',
     avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   },
   {
     id: 'admin1',
     name: 'Sarah Connor',
     role: 'admin',
-    department: 'HR',
+    department: 'OD',
     email: 'sarah@company.com',
+    phone: '+251 955 678 901',
+    status: 'active',
+    employedOn: '2019-05-12',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   },
   {
     id: 'mgr1',
     name: 'Robert Miller',
     role: 'manager',
-    department: 'Engineering',
+    department: 'RMS',
     email: 'robert@company.com',
+    phone: '+251 966 789 012',
+    status: 'active',
+    employedOn: '2018-09-20',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   }
 ];
