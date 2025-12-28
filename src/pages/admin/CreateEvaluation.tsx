@@ -29,7 +29,7 @@ export const CreateEvaluation = () => {
     endDate: '2024-03-31',
     type: 'quarterly',
     evaluateeIds: [] as string[],
-    assignments: {} as Record<string, { peerIds: string[], supervisorIds: string[] }>,
+    assignments: {} as Record<string, { peerIds: string[], supervisorIds: string[], subordinateIds: string[] }>,
     questionCollections: [
       { 
         id: 'qc-1', 
@@ -65,6 +65,11 @@ export const CreateEvaluation = () => {
   // Question Orchestration UX States
   const [expandedQCIds, setExpandedQCIds] = useState<string[]>([]);
   const [frameworkSearch, setFrameworkSearch] = useState('');
+  
+  // Assignment Search States
+  const [peerSearch, setPeerSearch] = useState<Record<string, string>>({});
+  const [supervisorSearch, setSupervisorSearch] = useState<Record<string, string>>({});
+  const [subordinateSearch, setSubordinateSearch] = useState<Record<string, string>>({});
 
   const toggleQCExpansion = (id: string) => {
     setExpandedQCIds(prev => 
@@ -96,17 +101,17 @@ export const CreateEvaluation = () => {
         // Initialize assignments if adding
         const newAssignments = { ...prev.assignments };
         if (!isSelected && !newAssignments[id]) {
-            newAssignments[id] = { peerIds: [], supervisorIds: [] };
+            newAssignments[id] = { peerIds: [], supervisorIds: [], subordinateIds: [] };
         }
         
         return { ...prev, evaluateeIds: newIds, assignments: newAssignments };
     });
   };
 
-  const updateAssignment = (evaluateeId: string, role: 'peer' | 'supervisor', assignedUserId: string) => {
+  const updateAssignment = (evaluateeId: string, role: 'peer' | 'supervisor' | 'subordinate', assignedUserId: string) => {
     setFormData(prev => {
-        const current = prev.assignments[evaluateeId] || { peerIds: [], supervisorIds: [] };
-        const key = role === 'peer' ? 'peerIds' : 'supervisorIds';
+        const current = prev.assignments[evaluateeId] || { peerIds: [], supervisorIds: [], subordinateIds: [] };
+        const key = role === 'peer' ? 'peerIds' : role === 'supervisor' ? 'supervisorIds' : 'subordinateIds';
         const isAssigned = current[key].includes(assignedUserId);
         
         const newList = isAssigned
@@ -384,7 +389,7 @@ export const CreateEvaluation = () => {
                              ))}
                           </div>
                           <span className="text-xs font-black text-slate-400 bg-slate-100 px-3 py-1 rounded-lg">
-                            {assignment.peerIds.length} Peers / {assignment.supervisorIds.length} Sup
+                            {assignment.peerIds.length} Peers / {assignment.supervisorIds.length} Sup / {assignment.subordinateIds?.length || 0} Sub
                           </span>
                           <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform duration-500 ${isExpanded ? 'rotate-180' : ''}`} />
                         </div>
@@ -397,16 +402,26 @@ export const CreateEvaluation = () => {
                             animate={{ height: 'auto' }}
                             exit={{ height: 0 }}
                           >
-                            <div className="p-8 bg-slate-50/50 border-t border-slate-100 grid md:grid-cols-2 gap-10">
+                            <div className="p-8 bg-slate-50/50 border-t border-slate-100 grid md:grid-cols-3 gap-10">
                               <section className="space-y-4 text-left">
                                 <h4 className="text-xs font-black uppercase tracking-widest text-indigo-600 flex items-center gap-2">
                                    <Users className="w-3 h-3" /> Assign Peers
                                 </h4>
-                                <div className="grid grid-cols-2 gap-2">
-                                  {users.filter(u => u.id !== eId && u.role === 'employee').length === 0 ? (
+                                <div className="relative">
+                                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                  <input
+                                    type="text"
+                                    placeholder="Search peers..."
+                                    value={peerSearch[eId] || ''}
+                                    onChange={(e) => setPeerSearch({...peerSearch, [eId]: e.target.value})}
+                                    className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-50 transition-all"
+                                  />
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
+                                  {users.filter(u => u.id !== eId && u.role === 'employee' && (!peerSearch[eId] || u.name.toLowerCase().includes(peerSearch[eId].toLowerCase()))).length === 0 ? (
                                     <p className="col-span-2 text-[10px] font-bold text-slate-400 italic">No eligible peers found.</p>
                                   ) : (
-                                    users.filter(u => u.id !== eId && u.role === 'employee').map(u => {
+                                    users.filter(u => u.id !== eId && u.role === 'employee' && (!peerSearch[eId] || u.name.toLowerCase().includes(peerSearch[eId].toLowerCase()))).map(u => {
                                       const selected = assignment.peerIds.includes(u.id);
                                       return (
                                         <button 
@@ -429,11 +444,21 @@ export const CreateEvaluation = () => {
                                 <h4 className="text-xs font-black uppercase tracking-widest text-orange-600 flex items-center gap-2">
                                    <UserCheck className="w-3 h-3" /> Assign Supervisor
                                 </h4>
-                                <div className="grid grid-cols-2 gap-2">
-                                  {users.filter(u => u.role === 'admin' || u.role === 'manager').length === 0 ? (
+                                <div className="relative">
+                                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                  <input
+                                    type="text"
+                                    placeholder="Search supervisors..."
+                                    value={supervisorSearch[eId] || ''}
+                                    onChange={(e) => setSupervisorSearch({...supervisorSearch, [eId]: e.target.value})}
+                                    className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-orange-300 focus:ring-2 focus:ring-orange-50 transition-all"
+                                  />
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
+                                  {users.filter(u => (u.role === 'admin' || u.role === 'manager') && (!supervisorSearch[eId] || u.name.toLowerCase().includes(supervisorSearch[eId].toLowerCase()))).length === 0 ? (
                                     <p className="col-span-2 text-[10px] font-bold text-slate-400 italic">No supervisors available.</p>
                                   ) : (
-                                    users.filter(u => u.role === 'admin' || u.role === 'manager').map(u => {
+                                    users.filter(u => (u.role === 'admin' || u.role === 'manager') && (!supervisorSearch[eId] || u.name.toLowerCase().includes(supervisorSearch[eId].toLowerCase()))).map(u => {
                                       const selected = assignment.supervisorIds.includes(u.id);
                                       return (
                                         <button 
@@ -441,6 +466,43 @@ export const CreateEvaluation = () => {
                                           onClick={() => updateAssignment(eId, 'supervisor', u.id)}
                                           className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
                                             selected ? 'bg-orange-500 border-orange-500 text-white shadow-md' : 'bg-white border-slate-100 hover:border-orange-200'
+                                          }`}
+                                        >
+                                          <img src={u.avatar} className="w-6 h-6 rounded-lg object-cover" />
+                                          <span className="text-[11px] font-black truncate">{u.name}</span>
+                                        </button>
+                                      );
+                                    })
+                                  )}
+                                </div>
+                              </section>
+
+                              <section className="space-y-4 text-left">
+                                <h4 className="text-xs font-black uppercase tracking-widest text-green-600 flex items-center gap-2">
+                                   <Users className="w-3 h-3" /> Assign Subordinate
+                                </h4>
+                                <div className="relative">
+                                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                  <input
+                                    type="text"
+                                    placeholder="Search subordinates..."
+                                    value={subordinateSearch[eId] || ''}
+                                    onChange={(e) => setSubordinateSearch({...subordinateSearch, [eId]: e.target.value})}
+                                    className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-green-300 focus:ring-2 focus:ring-green-50 transition-all"
+                                  />
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
+                                  {users.filter(u => u.id !== eId && u.role === 'employee' && (!subordinateSearch[eId] || u.name.toLowerCase().includes(subordinateSearch[eId].toLowerCase()))).length === 0 ? (
+                                    <p className="col-span-2 text-[10px] font-bold text-slate-400 italic">No eligible subordinates found.</p>
+                                  ) : (
+                                    users.filter(u => u.id !== eId && u.role === 'employee' && (!subordinateSearch[eId] || u.name.toLowerCase().includes(subordinateSearch[eId].toLowerCase()))).map(u => {
+                                      const selected = assignment.subordinateIds?.includes(u.id);
+                                      return (
+                                        <button 
+                                          key={u.id}
+                                          onClick={() => updateAssignment(eId, 'subordinate', u.id)}
+                                          className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
+                                            selected ? 'bg-green-500 border-green-500 text-white shadow-md' : 'bg-white border-slate-100 hover:border-green-200'
                                           }`}
                                         >
                                           <img src={u.avatar} className="w-6 h-6 rounded-lg object-cover" />
@@ -864,7 +926,7 @@ export const CreateEvaluation = () => {
                onClick={() => navigate('/admin/dashboard')}
                className="px-8 py-4 font-black uppercase tracking-widest text-slate-400 hover:bg-slate-50 rounded-2xl transition-all"
              >
-               Discard Command
+               Cancel
              </button>
              <button 
                onClick={step === 5 ? handlePublish : handleNext} 
@@ -873,7 +935,7 @@ export const CreateEvaluation = () => {
                 {step === 5 ? (
                   <>Publish To Entities <ShieldCheck className="w-6 h-6" /></>
                 ) : (
-                  <>Proceed Orchestration <ChevronRight className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" /></>
+                  <>Next Step <ChevronRight className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" /></>
                 )}
              </button>
           </div>
