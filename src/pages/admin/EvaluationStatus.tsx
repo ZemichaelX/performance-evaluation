@@ -112,19 +112,19 @@ export const EvaluationStatus = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-purple-50/30 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="relative">
-          <div className="absolute -inset-2 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 rounded-[44px] opacity-20 blur-xl" />
+          <div className="absolute -inset-2 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-[44px] opacity-20 blur-xl" />
           <header className="relative p-8 bg-white/40 backdrop-blur-xl rounded-[48px] border border-white/60 shadow-[0_20px_70px_rgba(0,0,0,0.08)]">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <h1 className="text-5xl font-black bg-gradient-to-r from-slate-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent tracking-tight leading-tight">
+                <h1 className="text-5xl font-black bg-gradient-to-r from-slate-900 via-blue-900 to-purple-900 bg-clip-text text-transparent tracking-tight leading-tight">
                   Evaluation Status
                 </h1>
                 <p className="text-slate-600 font-semibold mt-2 flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-indigo-500" />
+                  <TrendingUp className="w-4 h-4 text-blue-500" />
                   Track evaluation progress and completion across all cycles
                 </p>
               </div>
@@ -138,7 +138,7 @@ export const EvaluationStatus = () => {
                   }}
                   className={`px-6 py-3 rounded-xl text-sm font-bold transition-all ${
                     viewMode === 'active'
-                      ? 'bg-white text-indigo-600 shadow-sm border border-slate-100'
+                      ? 'bg-white text-blue-600 shadow-sm border border-slate-100'
                       : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
                   }`}
                 >
@@ -151,7 +151,7 @@ export const EvaluationStatus = () => {
                   }}
                   className={`px-6 py-3 rounded-xl text-sm font-bold transition-all ${
                     viewMode === 'history'
-                      ? 'bg-white text-indigo-600 shadow-sm border border-slate-100'
+                      ? 'bg-white text-blue-600 shadow-sm border border-slate-100'
                       : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
                   }`}
                 >
@@ -171,14 +171,14 @@ export const EvaluationStatus = () => {
               placeholder="Search employees or cycles..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl pl-12 pr-4 py-3 text-sm font-semibold focus:outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-50 transition-all"
+              className="w-full bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl pl-12 pr-4 py-3 text-sm font-semibold focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50 transition-all"
             />
           </div>
           
           <select
             value={selectedCycle}
             onChange={(e) => setSelectedCycle(e.target.value)}
-            className="bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-50 transition-all"
+            className="bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50 transition-all"
           >
             <option value="all">All Cycles</option>
             {/* Show all cycles in the dropdown, but filter by viewMode in the list logic if needed? 
@@ -194,7 +194,7 @@ export const EvaluationStatus = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-50 transition-all"
+            className="bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50 transition-all"
             disabled={selectedCycle === 'all'}
           >
             <option value="all">All Statuses</option>
@@ -231,7 +231,7 @@ export const EvaluationStatus = () => {
               const stats = getCycleStats(cycle.id);
               return (
                 <div key={cycle.id} className="relative group cursor-pointer" onClick={() => setSelectedCycle(cycle.id)}>
-                  <div className="absolute -inset-1 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 rounded-[28px] opacity-20 group-hover:opacity-40 blur-lg transition-opacity" />
+                  <div className="absolute -inset-1 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-[28px] opacity-20 group-hover:opacity-40 blur-lg transition-opacity" />
                   <div className="relative bg-white/90 backdrop-blur-sm p-6 rounded-[24px] border border-slate-200/50 shadow-lg hover:shadow-xl transition-all space-y-4">
                     <div className="flex items-start justify-between">
                       <div>
@@ -256,11 +256,11 @@ export const EvaluationStatus = () => {
                     <div>
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xs font-bold text-slate-600">Completion Rate</span>
-                        <span className="text-sm font-black text-indigo-600">{stats.completionRate.toFixed(0)}%</span>
+                        <span className="text-sm font-black text-blue-600">{stats.completionRate.toFixed(0)}%</span>
                       </div>
                       <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
                         <div 
-                          className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-500"
                           style={{ width: `${stats.completionRate}%` }}
                         />
                       </div>
@@ -305,14 +305,14 @@ export const EvaluationStatus = () => {
 
             <div className="relative">
               {/* Decorative Overlay - Now contained within the table wrapper only */}
-              <div className="absolute -inset-2 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 rounded-[44px] opacity-20 blur-xl pointer-events-none" />
+              <div className="absolute -inset-2 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-[44px] opacity-20 blur-xl pointer-events-none" />
               <div className="relative bg-white/90 backdrop-blur-sm rounded-[40px] border border-slate-200/50 overflow-hidden shadow-lg">
               <div className="p-6 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100/50 flex justify-between items-center">
                 <h2 className="text-2xl font-black text-slate-900 flex items-center gap-2">
-                  <Users className="w-6 h-6 text-indigo-600" />
+                  <Users className="w-6 h-6 text-blue-600" />
                   Employee Progress
                 </h2>
-                <span className="text-xs font-bold bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full">
+                <span className="text-xs font-bold bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full">
                   {cycles.find(c => c.id === selectedCycle)?.title}
                 </span>
               </div>
@@ -370,7 +370,7 @@ export const EvaluationStatus = () => {
                           <div className="flex items-center gap-2">
                             <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden w-24">
                               <div 
-                                className="h-full bg-indigo-500 rounded-full"
+                                className="h-full bg-blue-500 rounded-full"
                                 style={{ width: `${(empStatus.progress.completed / empStatus.progress.total) * 100}%` }}
                               />
                             </div>
@@ -380,7 +380,7 @@ export const EvaluationStatus = () => {
                           </div>
                         </td>
                         <td className="p-4">
-                          <span className="text-sm font-bold text-indigo-600">
+                          <span className="text-sm font-bold text-blue-600">
                             {empStatus.score !== null ? `${empStatus.score.toFixed(1)}/5` : '-'}
                           </span>
                         </td>
@@ -390,7 +390,7 @@ export const EvaluationStatus = () => {
                               e.stopPropagation();
                               setSelectedEmployee({ id: employee.id, name: employee.name });
                             }}
-                            className="bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-50 hover:text-indigo-600 transition-colors shadow-sm"
+                            className="bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-50 hover:text-blue-600 transition-colors shadow-sm"
                           >
                             View Details
                           </button>
@@ -442,7 +442,7 @@ export const EvaluationStatus = () => {
                   const details = getDetailedBreakdown(selectedEmployee.id, selectedCycle);
                   const sections = [
                     { title: 'Self Evaluation', items: details.self ? [details.self] : [], color: 'blue' },
-                    { title: 'Peer Evaluations', items: details.peers, color: 'indigo' },
+                    { title: 'Peer Evaluations', items: details.peers, color: 'blue' },
                     { title: 'Supervisor Evaluations', items: details.supervisors, color: 'orange' },
                     { title: 'Subordinate Evaluations', items: details.subordinates, color: 'green' }
                   ];
@@ -475,7 +475,7 @@ export const EvaluationStatus = () => {
                                   <div className="text-right">
                                     {submission.status === 'submitted' ? (
                                       <>
-                                        <div className="text-sm font-black text-indigo-600">{avgScore?.toFixed(1) || '-'} / 5</div>
+                                        <div className="text-sm font-black text-blue-600">{avgScore?.toFixed(1) || '-'} / 5</div>
                                         <div className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full inline-block mt-1">Submitted</div>
                                       </>
                                     ) : (
@@ -495,7 +495,7 @@ export const EvaluationStatus = () => {
                                       date: submission.submittedAt || '',
                                       scores: submission.scores
                                     })}
-                                    className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-2 rounded-xl transition-colors text-center"
+                                    className="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-xl transition-colors text-center"
                                   >
                                     View Submission Content
                                   </button>
@@ -528,7 +528,7 @@ export const EvaluationStatus = () => {
       {viewingSubmission && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
           <div className="bg-white rounded-[32px] shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
-            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-indigo-50 to-white">
+            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-blue-50 to-white">
               <div className="flex items-center gap-4">
                  <button 
                   onClick={() => setViewingSubmission(null)}
@@ -539,14 +539,14 @@ export const EvaluationStatus = () => {
                 <div>
                   <h3 className="text-xl font-black text-slate-900">Submission Details</h3>
                   <p className="text-slate-500 font-bold text-sm">
-                    Evaluated by <span className="text-indigo-600">{viewingSubmission.evaluatorName}</span> • {new Date(viewingSubmission.date).toLocaleDateString()}
+                    Evaluated by <span className="text-blue-600">{viewingSubmission.evaluatorName}</span> • {new Date(viewingSubmission.date).toLocaleDateString()}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                  <div className="text-right hidden sm:block">
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Average Score</p>
-                    <p className="text-2xl font-black text-indigo-600 leading-none">
+                    <p className="text-2xl font-black text-blue-600 leading-none">
                       {(viewingSubmission.scores.reduce((a, b) => a + b.score, 0) / (viewingSubmission.scores.length || 1)).toFixed(1)} <span className="text-sm text-slate-400 font-bold">/ 5</span>
                     </p>
                  </div>
@@ -567,7 +567,7 @@ export const EvaluationStatus = () => {
                   </p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-400">Score Provided</span>
-                    <span className="text-lg font-black text-indigo-600">{score.score} / 5</span>
+                    <span className="text-lg font-black text-blue-600">{score.score} / 5</span>
                   </div>
                 </div>
               ))}

@@ -6,7 +6,7 @@ interface EvaluationModalProps {
   isOpen: boolean;
   onClose: () => void;
   cycleId: string;
-  type?: 'self' | 'peer' | 'supervisor';
+  type?: 'self' | 'peer' | 'supervisor' | 'subordinate';
   evaluateeId?: string;
 }
 
@@ -83,12 +83,12 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
         
         <div className="p-10 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
           <div className="flex items-center gap-6">
-            <div className="w-16 h-16 bg-indigo-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-indigo-100 transform -rotate-6">
+            <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-blue-100 transform -rotate-6">
               <ShieldCheck className="w-8 h-8" />
             </div>
             <div>
               <h2 className="text-3xl font-black text-slate-900 tracking-tight capitalize">
-                {type} <span className="text-indigo-600">Audit</span>
+                {type} <span className="text-blue-600">Audit</span>
               </h2>
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">Industrial Performance Protocol</p>
             </div>
@@ -100,7 +100,7 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
 
         {!isSuccess ? (
           <div className="flex-1 overflow-y-auto p-10 space-y-16 custom-scrollbar">
-            <div className="bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100 flex gap-4 text-indigo-900 text-sm font-bold">
+            <div className="bg-blue-50/50 p-6 rounded-3xl border border-blue-100 flex gap-4 text-blue-900 text-sm font-bold">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <p>Your responses are encrypted and stored as immutable performance data. Review meticulously against industrial benchmarks.</p>
             </div>
@@ -115,9 +115,9 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
                 </div>
                 
                 {allQuestions.filter(q => q.category === cat).map(q => (
-                  <div key={q.id} className="bg-white p-8 rounded-3xl border border-slate-100 hover:border-indigo-200 transition-all group shadow-sm">
+                  <div key={q.id} className="bg-white p-8 rounded-3xl border border-slate-100 hover:border-blue-200 transition-all group shadow-sm">
                     <p className="text-slate-900 font-extrabold text-sm mb-6 leading-relaxed flex gap-4">
-                       <span className="text-indigo-300">#</span>
+                       <span className="text-blue-300">#</span>
                        {q.text}
                     </p>
                     <div className="grid grid-cols-5 gap-3">
@@ -133,12 +133,12 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
                           onClick={() => handleScoreChange(q.id, rating.v)}
                           className={`group/btn relative py-6 rounded-2xl font-black transition-all transform active:scale-95 flex flex-col items-center justify-center gap-1 ${
                             scores[q.id] === rating.v 
-                              ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200 ring-4 ring-indigo-50' 
-                              : 'bg-slate-50 text-slate-400 border border-slate-100 hover:border-indigo-300 hover:text-indigo-600'
+                              ? 'bg-blue-600 text-white shadow-xl shadow-blue-200 ring-4 ring-blue-50' 
+                              : 'bg-slate-50 text-slate-400 border border-slate-100 hover:border-blue-300 hover:text-blue-600'
                           }`}
                         >
                           <span className="text-xl">{rating.v}</span>
-                          <span className={`text-[8px] uppercase tracking-tighter ${scores[q.id] === rating.v ? 'text-indigo-100' : 'text-slate-400 group-hover/btn:text-indigo-400'}`}>{rating.l}</span>
+                          <span className={`text-[8px] uppercase tracking-tighter ${scores[q.id] === rating.v ? 'text-blue-100' : 'text-slate-400 group-hover/btn:text-blue-400'}`}>{rating.l}</span>
                         </button>
                       ))}
                     </div>
@@ -156,7 +156,7 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
                 <textarea 
                   value={improvementAreas}
                   onChange={e => setImprovementAreas(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 outline-none transition-all placeholder:text-slate-300 min-h-[160px]"
+                  className="w-full bg-slate-50 border border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all placeholder:text-slate-300 min-h-[160px]"
                   placeholder="Identify specific competencies requiring immediate optimization..."
                 />
               </section>
@@ -166,7 +166,7 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
                 <textarea 
                   value={nextGoals}
                   onChange={e => setNextGoals(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 outline-none transition-all placeholder:text-slate-300 min-h-[160px]"
+                  className="w-full bg-slate-50 border border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all placeholder:text-slate-300 min-h-[160px]"
                   placeholder="Outline agreed-upon milestones and performance indicators for the following cycle..."
                 />
               </section>
@@ -176,7 +176,7 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
                 <textarea 
                   value={employeeComments}
                   onChange={e => setEmployeeComments(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 outline-none transition-all placeholder:text-slate-300 min-h-[160px]"
+                  className="w-full bg-slate-50 border border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all placeholder:text-slate-300 min-h-[160px]"
                   placeholder="Additional context or shared perspectives on this audit..."
                 />
               </section>
@@ -238,7 +238,7 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
             <button 
               onClick={handleSubmit}
               disabled={isSubmitting || Object.keys(scores).length < allQuestions.length}
-              className="px-10 py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-2xl shadow-indigo-100 flex items-center gap-3 disabled:opacity-30 disabled:grayscale transition-all"
+              className="px-10 py-4 bg-blue-600 text-white font-black rounded-2xl hover:bg-blue-700 shadow-2xl shadow-blue-100 flex items-center gap-3 disabled:opacity-30 disabled:grayscale transition-all"
             >
               {isSubmitting ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

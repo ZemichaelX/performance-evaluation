@@ -27,10 +27,10 @@ export const AdminDashboard = () => {
       <div className="space-y-8 max-w-7xl mx-auto animate-in fade-in duration-500">
         <button 
           onClick={() => setSelectedCycleId(null)}
-          className="flex items-center gap-2 text-slate-500 font-bold hover:text-indigo-600 transition-colors group"
+          className="flex items-center gap-2 text-slate-500 font-bold hover:text-blue-600 transition-colors group"
         >
           <ArrowRight className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
-          Back to Intelligence Dashboard
+          Back to Strategize Dashboard
         </button>
 
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
@@ -38,7 +38,7 @@ export const AdminDashboard = () => {
             <h1 className="text-4xl font-black text-slate-900 tracking-tight">{selectedCycle.title}</h1>
             <p className="text-slate-500 font-semibold tracking-tight">Real-time engagement telemetry and audit logs.</p>
           </div>
-          <button className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all">
+          <button className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
             Export Analytics
           </button>
         </header>
@@ -83,7 +83,7 @@ export const AdminDashboard = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
                           <div 
-                            className="bg-indigo-500 h-full transition-all duration-1000" 
+                            className="bg-blue-500 h-full transition-all duration-1000" 
                             style={{ width: `${(sub.filter(s => s.type === 'peer').length / 4) * 100}%` }}
                           />
                         </div>
@@ -94,7 +94,7 @@ export const AdminDashboard = () => {
                     </td>
                     <td className="px-8 py-6">
                       {sub.some(s => s.type === 'supervisor') ? (
-                         <div className="flex items-center gap-2 text-indigo-500 font-black text-xs uppercase tracking-widest">
+                         <div className="flex items-center gap-2 text-blue-500 font-black text-xs uppercase tracking-widest">
                            <CheckCircle2 className="w-4 h-4" /> Audited
                          </div>
                       ) : (
@@ -104,7 +104,7 @@ export const AdminDashboard = () => {
                       )}
                     </td>
                     <td className="px-8 py-6">
-                      <button className="text-xs font-black text-indigo-600 uppercase tracking-widest hover:text-indigo-700 underline-offset-4 hover:underline">
+                      <button className="text-xs font-black text-blue-600 uppercase tracking-widest hover:text-blue-700 underline-offset-4 hover:underline">
                         Nudge Entity
                       </button>
                     </td>
@@ -122,20 +122,20 @@ export const AdminDashboard = () => {
     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Hero Header with Gradient Background */}
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-[48px] opacity-60 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-slate-50 to-blue-50 rounded-[48px] opacity-60 blur-3xl" />
         <header className="relative flex flex-col md:flex-row justify-between items-start md:items-end gap-6 p-8 bg-white/40 backdrop-blur-xl rounded-[48px] border border-white/60 shadow-[0_20px_70px_rgba(0,0,0,0.08)]">
           <div>
-            <h1 className="text-5xl font-black bg-gradient-to-r from-slate-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent tracking-tight leading-tight">
-              Admin Intelligence
+            <h1 className="text-5xl font-black bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent tracking-tighter leading-tight">
+              Strategize Command
             </h1>
             <p className="text-slate-600 font-semibold mt-2 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-indigo-500" />
+              <Sparkles className="w-4 h-4 text-blue-500" />
               Operational command and strategic performance oversight
             </p>
           </div>
           <button 
             onClick={() => navigate('/admin/create-evaluation')}
-            className="relative group bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-10 py-5 rounded-3xl font-black shadow-[0_20px_50px_rgba(99,102,241,0.25)] hover:shadow-[0_20px_60px_rgba(99,102,241,0.4)] hover:scale-[1.02] transition-all duration-300 flex items-center gap-3 overflow-hidden"
+            className="relative group bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white px-10 py-5 rounded-3xl font-black shadow-[0_20px_50px_rgba(37,99,235,0.25)] hover:shadow-[0_20px_60px_rgba(37,99,235,0.4)] hover:scale-[1.02] transition-all duration-300 flex items-center gap-3 overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
             <Zap className="w-5 h-5" />
@@ -179,8 +179,8 @@ export const AdminDashboard = () => {
       <div className="grid lg:grid-cols-12 gap-12">
         <section className="lg:col-span-8 space-y-10">
            <div className="flex items-center justify-between px-2">
-             <h2 className="text-3xl font-black bg-gradient-to-r from-slate-900 to-indigo-900 bg-clip-text text-transparent flex items-center gap-4">
-               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-200">
+             <h2 className="text-3xl font-black bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent flex items-center gap-4">
+               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-200">
                  <Calendar className="w-6 h-6 text-white" />
                </div>
                Deployment Status
@@ -199,15 +199,15 @@ export const AdminDashboard = () => {
              ) : (
                activeCycles.map(cycle => (
                  <div key={cycle.id} className="relative group">
-                   <div className="absolute -inset-1 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 rounded-[44px] opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-300" />
+                   <div className="absolute -inset-1 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 rounded-[44px] opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-300" />
                    <button 
                      onClick={() => setSelectedCycleId(cycle.id)}
-                     className="relative w-full text-left bg-white/90 backdrop-blur-sm p-10 rounded-[40px] border border-slate-200/50 shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all hover:-translate-y-1 hover:border-indigo-200 hover:shadow-[0_20px_60px_rgba(99,102,241,0.15)] flex justify-between items-center overflow-hidden"
+                     className="relative w-full text-left bg-white/90 backdrop-blur-sm p-10 rounded-[40px] border border-slate-200/50 shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_20px_60px_rgba(99,102,241,0.15)] flex justify-between items-center overflow-hidden"
                    >
-                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-indigo-500/5 group-hover:via-purple-500/5 group-hover:to-pink-500/5 transition-all duration-500" />
+                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-blue-500/5 group-hover:via-purple-500/5 group-hover:to-pink-500/5 transition-all duration-500" />
                      <div className="relative z-10">
                        <div className="flex items-center gap-3 mb-4">
-                          <span className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm">
+                          <span className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm">
                             {cycle.type}
                           </span>
                           <div className="flex items-center gap-2">
@@ -220,7 +220,7 @@ export const AdminDashboard = () => {
                          <Clock className="w-3.5 h-3.5" /> {cycle.startDate} — {cycle.endDate}
                        </p>
                      </div>
-                     <div className="relative z-10 w-16 h-16 bg-gradient-to-br from-slate-50 to-white rounded-3xl flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-xl group-hover:shadow-indigo-200 border border-slate-100 group-hover:border-transparent">
+                     <div className="relative z-10 w-16 h-16 bg-gradient-to-br from-slate-50 to-white rounded-3xl flex items-center justify-center group-hover:from-blue-600 group-hover:to-purple-600 group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-xl group-hover:shadow-blue-200 border border-slate-100 group-hover:border-transparent">
                        <ArrowRight className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" />
                      </div>
                    </button>
@@ -269,7 +269,7 @@ const StatCard = ({ label, value, icon, gradient, bgGradient }: any) => (
       </div>
       <div>
         <p className="text-slate-500 text-xs font-black uppercase tracking-widest mb-1">{label}</p>
-        <p className="text-3xl font-black bg-gradient-to-r from-slate-900 to-indigo-900 bg-clip-text text-transparent tracking-tight">{value}</p>
+        <p className="text-3xl font-black bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent tracking-tight">{value}</p>
       </div>
     </div>
   </div>
@@ -280,7 +280,7 @@ const ActivityItem = ({ user, action, time, avatar }: any) => (
     <img src={avatar} alt="" className="w-12 h-12 rounded-2xl object-cover shadow-sm ring-4 ring-white" />
     <div className="flex-1 min-w-0">
       <p className="text-sm font-semibold text-slate-900 leading-tight">
-        <span className="font-black text-indigo-600">{user}</span> {action}
+        <span className="font-black text-blue-600">{user}</span> {action}
       </p>
       <p className="text-xs font-black text-slate-400 uppercase tracking-widest mt-1.5">{time}</p>
     </div>

@@ -7,7 +7,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        // We can add custom colors here if needed for the "Rich Aesthetics"
+        indigo: {
+          600: '#3838EC',
+        },
       },
     },
   },

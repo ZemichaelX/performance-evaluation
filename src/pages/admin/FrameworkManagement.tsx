@@ -94,20 +94,20 @@ export const FrameworkManagement = () => {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header */}
         <div className="relative">
-          <div className="absolute -inset-2 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 rounded-[44px] opacity-20 blur-xl" />
+          <div className="absolute -inset-2 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-[44px] opacity-20 blur-xl" />
           <header className="relative flex flex-col md:flex-row justify-between items-start md:items-end gap-6 p-8 bg-white/40 backdrop-blur-xl rounded-[48px] border border-white/60 shadow-[0_20px_70px_rgba(0,0,0,0.08)]">
             <div>
-              <h1 className="text-5xl font-black bg-gradient-to-r from-slate-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent tracking-tight leading-tight">
+              <h1 className="text-5xl font-black bg-gradient-to-r from-slate-900 via-blue-900 to-purple-900 bg-clip-text text-transparent tracking-tight leading-tight">
                 Competency Frameworks
               </h1>
               <p className="text-slate-600 font-semibold mt-2 flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-indigo-500" />
+                <BookOpen className="w-4 h-4 text-blue-500" />
                 Manage evaluation criteria and question templates
               </p>
             </div>
             <button
               onClick={startCreate}
-              className="relative group bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-8 py-4 rounded-3xl font-black shadow-[0_20px_50px_rgba(99,102,241,0.25)] hover:shadow-[0_20px_60px_rgba(99,102,241,0.4)] hover:scale-[1.02] transition-all duration-300 flex items-center gap-3"
+              className="relative group bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white px-8 py-4 rounded-3xl font-black shadow-[0_20px_50px_rgba(99,102,241,0.25)] hover:shadow-[0_20px_60px_rgba(99,102,241,0.4)] hover:scale-[1.02] transition-all duration-300 flex items-center gap-3"
             >
               <Plus className="w-5 h-5" />
               Create Framework
@@ -123,15 +123,15 @@ export const FrameworkManagement = () => {
             placeholder="Search frameworks..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl pl-12 pr-4 py-3 text-sm font-semibold focus:outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-50 transition-all"
+            className="w-full bg-white/90 backdrop-blur-sm border border-slate-200/50 rounded-2xl pl-12 pr-4 py-3 text-sm font-semibold focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50 transition-all"
           />
         </div>
 
         {/* Create/Edit Form */}
         {(isCreating || editingId) && (
           <div className="relative animate-in fade-in slide-in-from-top-4 duration-500">
-            <div className="absolute -inset-2 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 rounded-[44px] opacity-30 blur-xl" />
-            <div className="relative bg-white/90 backdrop-blur-sm p-8 rounded-[40px] border border-indigo-200/50 shadow-lg space-y-6">
+            <div className="absolute -inset-2 bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 rounded-[44px] opacity-30 blur-xl" />
+            <div className="relative bg-white/90 backdrop-blur-sm p-8 rounded-[40px] border border-blue-200/50 shadow-lg space-y-6">
               <h2 className="text-2xl font-black text-slate-900">
                 {isCreating ? 'Create New Framework' : 'Edit Framework'}
               </h2>
@@ -143,7 +143,7 @@ export const FrameworkManagement = () => {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-50"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"
                     placeholder="e.g., Leadership Competency"
                   />
                 </div>
@@ -153,7 +153,7 @@ export const FrameworkManagement = () => {
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-50 resize-none"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50 resize-none"
                     rows={3}
                     placeholder="Describe the purpose and scope of this framework..."
                   />
@@ -164,7 +164,7 @@ export const FrameworkManagement = () => {
                     <label className="text-sm font-bold text-slate-700">Questions * ({formData.questions.length})</label>
                     <button
                       onClick={addQuestion}
-                      className="text-indigo-600 text-sm font-bold flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-all"
+                      className="text-blue-600 text-sm font-bold flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all"
                     >
                       <Plus className="w-4 h-4" />
                       Add Question
@@ -181,13 +181,13 @@ export const FrameworkManagement = () => {
                               type="text"
                               value={q.category}
                               onChange={(e) => updateQuestion(idx, 'category', e.target.value)}
-                              className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold focus:outline-none focus:border-indigo-300"
+                              className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold focus:outline-none focus:border-blue-300"
                               placeholder="Category (e.g., 1.1 Thought Leadership)"
                             />
                             <textarea
                               value={q.text}
                               onChange={(e) => updateQuestion(idx, 'text', e.target.value)}
-                              className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold focus:outline-none focus:border-indigo-300 resize-none"
+                              className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold focus:outline-none focus:border-blue-300 resize-none"
                               rows={2}
                               placeholder="Question text..."
                             />
@@ -217,7 +217,7 @@ export const FrameworkManagement = () => {
                 </button>
                 <button
                   onClick={handleSave}
-                  className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all flex items-center gap-2"
+                  className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all flex items-center gap-2"
                 >
                   <Save className="w-4 h-4" />
                   {isCreating ? 'Create Framework' : 'Save Changes'}
@@ -231,7 +231,7 @@ export const FrameworkManagement = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredFrameworks.map((framework) => (
             <div key={framework.id} className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 rounded-[28px] opacity-20 group-hover:opacity-40 blur-lg transition-opacity" />
+              <div className="absolute -inset-1 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-[28px] opacity-20 group-hover:opacity-40 blur-lg transition-opacity" />
               <div className="relative bg-white/90 backdrop-blur-sm p-6 rounded-[24px] border border-slate-200/50 shadow-lg hover:shadow-xl transition-all space-y-4">
                 <div>
                   <h3 className="text-lg font-black text-slate-900 mb-2">{framework.name}</h3>
@@ -239,7 +239,7 @@ export const FrameworkManagement = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full">
+                  <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full">
                     {framework.questions.length} Questions
                   </span>
                 </div>
@@ -247,7 +247,7 @@ export const FrameworkManagement = () => {
                 <div className="flex gap-2 pt-2 border-t border-slate-100">
                   <button
                     onClick={() => startEdit(framework)}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-indigo-600 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-all"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-blue-600 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all"
                   >
                     <Edit2 className="w-4 h-4" />
                     Edit

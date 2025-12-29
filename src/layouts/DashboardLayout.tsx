@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useStore } from '../store/useStore';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { LogOut, ChevronDown } from 'lucide-react';
+import { LogOut } from 'lucide-react';
+import { NotificationDropdown } from '../components/NotificationDropdown';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -12,7 +13,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, type
   const { currentUser, logout } = useStore();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isStrategyOpen, setIsStrategyOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -27,39 +27,30 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, type
       <nav className="bg-white/80 backdrop-blur-xl sticky top-0 z-50 h-20 border-b border-slate-100/60 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)]">
         <div className="max-w-[1400px] mx-auto px-8 h-full flex items-center justify-between">
           <div className="flex items-center gap-10">
-            {/* Strategy Dropdown - Light Theme */}
-            <div className="relative">
-              <button 
-                onClick={() => setIsStrategyOpen(!isStrategyOpen)}
-                className="flex items-center gap-3 bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-xl transition-all border border-slate-200/50 group"
-              >
-                <span className="text-xs font-black text-slate-500 uppercase tracking-widest">Strategy</span>
-                <span className="text-sm font-bold text-indigo-600">2024/2027</span>
-                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isStrategyOpen ? 'rotate-180' : ''}`} />
-              </button>
-              
-              {isStrategyOpen && (
-                <div className="absolute top-full left-0 mt-3 w-56 bg-white border border-slate-100 rounded-2xl shadow-2xl py-3 z-50 animate-in fade-in zoom-in-95 duration-200">
-                  <p className="px-5 py-2 text-xs font-black text-slate-400 uppercase tracking-widest">Select Strategy</p>
-                  <button className="w-full text-left px-5 py-2.5 text-sm hover:bg-slate-50 font-bold text-indigo-600 flex items-center justify-between">
-                    Strategy 2024/2027
-                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-600"></div>
-                  </button>
-                  <button className="w-full text-left px-5 py-2.5 text-sm hover:bg-slate-50 text-slate-500 font-medium">Strategy 2021/2023</button>
-                </div>
-              )}
-            </div>
+            {/* Strategize Brand Logo */}
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-100 group-hover:scale-105 transition-transform duration-300">
+                <div className="w-5 h-5 border-4 border-white rounded-full border-t-transparent animate-[spin_3s_linear_infinite]" />
+              </div>
+              <span className="text-2xl font-black text-slate-900 tracking-tighter">
+                Strategize<span className="text-blue-600">.</span>
+              </span>
+            </Link>
           </div>
 
           {/* User Profile Info - Light Theme */}
           <div className="flex items-center gap-6">
+            <NotificationDropdown />
+            
+            <div className="h-8 w-px bg-slate-200"></div>
+
             <div className="text-right hidden sm:block">
               <p className="text-sm font-black text-slate-900">{currentUser?.name}</p>
-              <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">{currentUser?.department}</p>
+              <p className="text-xs text-slate-400 font-bold tracking-widest">{currentUser?.email}</p>
             </div>
             <div className="flex items-center gap-2 group relative">
                <div className="relative">
-                  <img src={currentUser?.avatar} alt="Profile" className="w-11 h-11 rounded-2xl border-2 border-white shadow-md group-hover:shadow-indigo-100 transition-all duration-300 object-cover" />
+                  <img src={currentUser?.avatar} alt="Profile" className="w-11 h-11 rounded-2xl border-2 border-white shadow-md group-hover:shadow-blue-100 transition-all duration-300 object-cover" />
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                </div>
                <div className="absolute top-full right-0 pt-3 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
@@ -83,14 +74,15 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, type
           {type === 'employee' ? (
             <>
               <TabLink to="/employee/dashboard" active={isTabActive('/employee/dashboard')}>Dashboard</TabLink>
-              <TabLink to="/employee/history" active={isTabActive('/employee/history')}>Evaluation History</TabLink>
+              <TabLink to="/employee/history" active={isTabActive('/employee/history')}>History</TabLink>
             </>
           ) : (
             <>
-              <TabLink to="/admin/dashboard" active={isTabActive('/admin/dashboard')}>Admin Console</TabLink>
-              <TabLink to="/admin/create-evaluation" active={isTabActive('/admin/create-evaluation')}>Evaluation Management</TabLink>
-              <TabLink to="/admin/status" active={isTabActive('/admin/status')}>Evaluation Status</TabLink>
-              <TabLink to="/admin/frameworks" active={isTabActive('/admin/frameworks')}>Competency Frameworks</TabLink>
+              <TabLink to="/admin/dashboard" active={isTabActive('/admin/dashboard')}>Dashboard</TabLink>
+              <TabLink to="/admin/create-evaluation" active={isTabActive('/admin/create-evaluation')}>Add Evaluation</TabLink>
+              <TabLink to="/admin/status" active={isTabActive('/admin/status')}>Status</TabLink>
+              <TabLink to="/admin/frameworks" active={isTabActive('/admin/frameworks')}>Frameworks</TabLink>
+              <TabLink to="/admin/management" active={isTabActive('/admin/management')}>Management</TabLink>
             </>
           )}
         </div>

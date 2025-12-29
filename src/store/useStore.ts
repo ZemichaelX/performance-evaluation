@@ -29,7 +29,7 @@ interface AppState {
 const MOCK_USERS: User[] = [
   {
     id: 'emp1',
-    name: 'Alex Johnson',
+    name: 'Abebe Kebede',
     role: 'employee',
     department: 'OD',
     email: 'alex@company.com',
@@ -40,7 +40,7 @@ const MOCK_USERS: User[] = [
   },
   {
     id: 'emp2',
-    name: 'Jessica Chen',
+    name: 'Bethlehem Tadesse',
     role: 'employee',
     department: 'RMS',
     email: 'jessica@company.com',
@@ -51,7 +51,7 @@ const MOCK_USERS: User[] = [
   },
   {
     id: 'emp3',
-    name: 'Marcus Thorne',
+    name: 'Dawit Mengistu',
     role: 'employee',
     department: 'KSP',
     email: 'marcus@company.com',
@@ -62,7 +62,7 @@ const MOCK_USERS: User[] = [
   },
   {
     id: 'emp4',
-    name: 'Amara Okafor',
+    name: 'Hiwot Hailu',
     role: 'employee',
     department: 'F&I',
     email: 'amara@company.com',
@@ -73,7 +73,7 @@ const MOCK_USERS: User[] = [
   },
   {
     id: 'admin1',
-    name: 'Sarah Connor',
+    name: 'Selamawit Gifty',
     role: 'admin',
     department: 'OD',
     email: 'sarah@company.com',
@@ -84,7 +84,7 @@ const MOCK_USERS: User[] = [
   },
   {
     id: 'mgr1',
-    name: 'Robert Miller',
+    name: 'Yosef Tesfaye',
     role: 'manager',
     department: 'RMS',
     email: 'robert@company.com',
@@ -92,6 +92,33 @@ const MOCK_USERS: User[] = [
     status: 'active',
     employedOn: '2018-09-20',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  },
+  {
+    id: 'emp5',
+    name: 'Abrham Kebede',
+    role: 'employee',
+    department: 'Sales',
+    email: 'david@company.com',
+    status: 'active',
+    avatar: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  },
+  {
+    id: 'emp6',
+    name: 'Mulu Legesse',
+    role: 'employee',
+    department: 'Marketing',
+    email: 'fatima@company.com',
+    status: 'active',
+    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  },
+  {
+    id: 'emp7',
+    name: 'Henok Tulu',
+    role: 'employee',
+    department: 'Ops',
+    email: 'george@company.com',
+    status: 'active',
+    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   }
 ];
 
@@ -166,11 +193,11 @@ const MOCK_CYCLES: EvaluationCycle[] = [
     competencies: { behavioral: true, technical: true, leadership: false }
   },
   {
-    id: 'cycle-2024-q4',
-    title: 'Q4 2024 Performance Review',
+    id: 'cycle-2024-semi',
+    title: 'Semi-Annual Performance Review 2024',
     startDate: '2024-10-01',
     endDate: '2024-12-31',
-    type: 'annual',
+    type: 'semi-annual',
     status: 'completed',
     weights: { own: 40, shared: 30 },
     competencies: { behavioral: true, technical: true, leadership: false }
@@ -279,7 +306,7 @@ export const useStore = create<AppState>()(persist((set, get) => ({
       evaluateeId: 'emp1',
       cycleId: 'cycle-2025-annual',
       type: 'peer',
-      status: 'submitted',
+      status: 'pending',
       submittedAt: '2025-12-25T10:00:00Z',
       scores: [
         { questionId: 'q-bl-1', score: 4 }, { questionId: 'q-bl-2', score: 5 }, { questionId: 'q-bl-3', score: 4 }, { questionId: 'q-bl-4', score: 5 },
@@ -289,12 +316,110 @@ export const useStore = create<AppState>()(persist((set, get) => ({
       ]
     },
     {
+      id: 'sub-peer2',
+      evaluatorId: 'emp3',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2025-annual',
+      type: 'peer',
+      status: 'submitted',
+      submittedAt: '2025-12-25T11:30:00Z',
+      scores: [
+        { questionId: 'q-bl-1', score: 9 }, { questionId: 'q-bl-2', score: 4 }, { questionId: 'q-bl-3', score: 4 },
+        { questionId: 'q-prof-1', score: 5 }, { questionId: 'q-prof-2', score: 5 }, { questionId: 'q-prof-3', score: 5 }
+      ]
+    },
+    {
+      id: 'sub-peer3',
+      evaluatorId: 'emp4',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2025-annual',
+      type: 'peer',
+      status: 'submitted',
+      submittedAt: '2025-12-24T14:15:00Z',
+      scores: [
+        { questionId: 'q-bl-1', score: 3 }, { questionId: 'q-bl-2', score: 4 }, { questionId: 'q-bl-3', score: 4 }
+      ]
+    },
+    {
+      id: 'sub-peer4',
+      evaluatorId: 'admin2',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2025-annual',
+      type: 'peer',
+      status: 'submitted',
+      submittedAt: '2025-12-23T09:45:00Z',
+      scores: [
+        { questionId: 'q-bl-1', score: 5 }, { questionId: 'q-bl-2', score: 5 }, { questionId: 'q-bl-3', score: 5 }
+      ]
+    },
+    {
+      id: 'sub-sub1',
+      evaluatorId: 'emp5',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2025-annual',
+      type: 'subordinate',
+      status: 'pending',
+      submittedAt: '2025-12-25T14:30:00Z',
+      scores: [
+        { questionId: 'q-lorg-1', score: 5 }, { questionId: 'q-lorg-2', score: 4 }, { questionId: 'q-lorg-3', score: 5 },
+        { questionId: 'q-loth-1', score: 5 }, { questionId: 'q-loth-2', score: 5 }, { questionId: 'q-loth-3', score: 4 }
+      ]
+    },
+    {
+      id: 'sub-sub2',
+      evaluatorId: 'emp6',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2025-annual',
+      type: 'subordinate',
+      status: 'submitted',
+      submittedAt: '2025-12-24T10:00:00Z',
+      scores: [
+        { questionId: 'q-lorg-1', score: 4 }, { questionId: 'q-lorg-2', score: 4 }, { questionId: 'q-lorg-3', score: 4 }
+      ]
+    },
+    {
+      id: 'sub-sub3',
+      evaluatorId: 'emp7',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2025-annual',
+      type: 'subordinate',
+      status: 'submitted',
+      submittedAt: '2025-12-26T16:45:00Z',
+      scores: [
+        { questionId: 'q-lorg-1', score: 5 }, { questionId: 'q-lorg-2', score: 5 }, { questionId: 'q-lorg-3', score: 5 }
+      ]
+    },
+    {
+       id: 'sub-sub4',
+       evaluatorId: 'emp2', // Jessica also reports to Alex in this mock scenario
+       evaluateeId: 'emp1',
+       cycleId: 'cycle-2025-annual',
+       type: 'subordinate',
+       status: 'submitted',
+       submittedAt: '2025-12-23T15:00:00Z',
+       scores: [
+         { questionId: 'q-lorg-1', score: 5 }, { questionId: 'q-lorg-2', score: 4 }, { questionId: 'q-lorg-3', score: 4 }
+       ]
+    },
+    {
+       id: 'sub-sub5',
+       evaluatorId: 'emp4', // Amara
+       evaluateeId: 'emp1',
+       cycleId: 'cycle-2025-annual',
+       type: 'subordinate',
+       status: 'submitted',
+       submittedAt: '2025-12-22T09:30:00Z',
+       scores: [
+         { questionId: 'q-lorg-1', score: 3 }, { questionId: 'q-lorg-2', score: 3 }, { questionId: 'q-lorg-3', score: 4 }
+       ]
+    },
+    {
       id: 'sub-sup1',
-      evaluatorId: 'admin1',
+      evaluatorId: 'mgr1',
       evaluateeId: 'emp1',
       cycleId: 'cycle-2025-annual',
       type: 'supervisor',
-      status: 'submitted',
+      status: 'pending',
       submittedAt: '2025-12-26T09:00:00Z',
       scores: [
         { questionId: 'q-bl-1', score: 5 }, { questionId: 'q-bl-2', score: 4 }, { questionId: 'q-bl-3', score: 5 }, { questionId: 'q-bl-4', score: 5 },
@@ -303,12 +428,49 @@ export const useStore = create<AppState>()(persist((set, get) => ({
         { questionId: 'q-loth-1', score: 5 }, { questionId: 'q-loth-2', score: 4 }, { questionId: 'q-loth-3', score: 5 }
       ]
     },
+    // Subordinates for 2024 Semi (Backfilled)
+    {
+      id: 'hist-sub-1',
+      evaluatorId: 'emp5',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2024-semi',
+      type: 'subordinate',
+      status: 'submitted',
+      submittedAt: '2024-12-16T14:20:00Z',
+      scores: [
+        { questionId: 'q-lorg-1', score: 5 }, { questionId: 'q-lorg-2', score: 4 }, { questionId: 'q-lorg-3', score: 5 }
+      ]
+    },
+    {
+      id: 'hist-sub-2',
+      evaluatorId: 'emp6',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2024-semi',
+      type: 'subordinate',
+      status: 'submitted',
+      submittedAt: '2024-12-17T09:45:00Z',
+      scores: [
+         { questionId: 'q-lorg-1', score: 4 }, { questionId: 'q-lorg-2', score: 4 }, { questionId: 'q-lorg-3', score: 5 }
+      ]
+    },
+    {
+      id: 'hist-sub-3',
+      evaluatorId: 'emp7',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2024-semi',
+      type: 'subordinate',
+      status: 'submitted',
+      submittedAt: '2024-12-18T11:15:00Z',
+      scores: [
+         { questionId: 'q-lorg-1', score: 5 }, { questionId: 'q-lorg-2', score: 5 }, { questionId: 'q-lorg-3', score: 4 }
+      ]
+    },
     // History Cycle Submissions (Q4 2024)
     {
       id: 'hist-self-1',
       evaluatorId: 'emp1',
       evaluateeId: 'emp1',
-      cycleId: 'cycle-2024-q4',
+      cycleId: 'cycle-2024-semi',
       type: 'self',
       status: 'submitted',
       submittedAt: '2024-12-15T10:00:00Z',
@@ -363,27 +525,14 @@ export const useStore = create<AppState>()(persist((set, get) => ({
       id: 'hist-self-3',
       evaluatorId: 'emp3',
       evaluateeId: 'emp3',
-      cycleId: 'cycle-2024-q4',
+      cycleId: 'cycle-2024-semi',
       type: 'self',
       status: 'submitted',
       submittedAt: '2024-12-15T16:00:00Z',
       scores: [{ questionId: 'q-bl-1', score: 4 }]
     },
     // --- Active Cycle (2025) Additional Submissions ---
-    {
-      id: 'sub-self-1',
-      evaluatorId: 'emp1',
-      evaluateeId: 'emp1',
-      cycleId: 'cycle-2025-annual',
-      type: 'self',
-      status: 'submitted',
-      submittedAt: '2025-12-24T10:00:00Z',
-      scores: [
-        { questionId: 'q-bl-1', score: 4 }, 
-        { questionId: 'q-prof-1', score: 5 },
-        { questionId: 'q-client-1', score: 4 }
-      ]
-    },
+    // sub-self-1 removed to allow testing submission flow
     {
       id: 'sub-self-2',
       evaluatorId: 'emp2',
