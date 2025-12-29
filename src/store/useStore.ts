@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { User, Objective, KPI, EvaluationCycle, EvaluationSubmission, CompetencyFramework } from '../types';
 
 interface AppState {
@@ -265,7 +266,7 @@ const MOCK_FRAMEWORKS: CompetencyFramework[] = [
   }
 ];
 
-export const useStore = create<AppState>((set, get) => ({
+export const useStore = create<AppState>()(persist((set, get) => ({
   currentUser: null,
   users: MOCK_USERS,
   cycles: MOCK_CYCLES,
@@ -572,4 +573,8 @@ export const useStore = create<AppState>((set, get) => ({
       submissions: [...state.submissions, ...newSubmissions]
     }));
   }
+}), {
+  name: 'performance-eval-storage',
+  storage: createJSONStorage(() => localStorage),
+  partialize: (state) => ({ currentUser: state.currentUser }),
 }));

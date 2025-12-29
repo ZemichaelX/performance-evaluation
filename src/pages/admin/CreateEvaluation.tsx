@@ -186,7 +186,7 @@ export const CreateEvaluation = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
+    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
       {/* Hero Header with Gradient Background */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-[48px] opacity-60 blur-3xl" />

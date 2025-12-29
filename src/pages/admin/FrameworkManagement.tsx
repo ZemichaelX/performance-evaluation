@@ -91,8 +91,7 @@ export const FrameworkManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-purple-50/30 p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header */}
         <div className="relative">
           <div className="absolute -inset-2 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 rounded-[44px] opacity-20 blur-xl" />
@@ -275,6 +274,5 @@ export const FrameworkManagement = () => {
           </div>
         )}
       </div>
-    </div>
-  );
+    );
 };
