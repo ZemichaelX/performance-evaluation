@@ -280,7 +280,12 @@ export const useStore = create<AppState>((set, get) => ({
       type: 'peer',
       status: 'submitted',
       submittedAt: '2025-12-25T10:00:00Z',
-      scores: [{ questionId: 'q-bl-1', score: 4 }, { questionId: 'q-bl-2', score: 5 }, { questionId: 'q-prof-1', score: 4 }]
+      scores: [
+        { questionId: 'q-bl-1', score: 4 }, { questionId: 'q-bl-2', score: 5 }, { questionId: 'q-bl-3', score: 4 }, { questionId: 'q-bl-4', score: 5 },
+        { questionId: 'q-prof-1', score: 4 }, { questionId: 'q-prof-2', score: 5 }, { questionId: 'q-prof-3', score: 4 }, { questionId: 'q-prof-4', score: 5 },
+        { questionId: 'q-client-1', score: 5 }, { questionId: 'q-client-2', score: 4 }, { questionId: 'q-client-3', score: 5 },
+        { questionId: 'q-res-1', score: 4 }, { questionId: 'q-res-2', score: 4 }, { questionId: 'q-res-3', score: 5 }
+      ]
     },
     {
       id: 'sub-sup1',
@@ -290,7 +295,12 @@ export const useStore = create<AppState>((set, get) => ({
       type: 'supervisor',
       status: 'submitted',
       submittedAt: '2025-12-26T09:00:00Z',
-      scores: [{ questionId: 'q-bl-1', score: 5 }, { questionId: 'q-bl-2', score: 4 }, { questionId: 'q-prof-1', score: 4 }]
+      scores: [
+        { questionId: 'q-bl-1', score: 5 }, { questionId: 'q-bl-2', score: 4 }, { questionId: 'q-bl-3', score: 5 }, { questionId: 'q-bl-4', score: 5 },
+        { questionId: 'q-prof-1', score: 4 }, { questionId: 'q-prof-2', score: 5 }, { questionId: 'q-prof-3', score: 5 }, { questionId: 'q-prof-4', score: 5 },
+        { questionId: 'q-lorg-1', score: 4 }, { questionId: 'q-lorg-2', score: 5 }, { questionId: 'q-lorg-3', score: 5 },
+        { questionId: 'q-loth-1', score: 5 }, { questionId: 'q-loth-2', score: 4 }, { questionId: 'q-loth-3', score: 5 }
+      ]
     },
     // History Cycle Submissions (Q4 2024)
     {
@@ -302,10 +312,10 @@ export const useStore = create<AppState>((set, get) => ({
       status: 'submitted',
       submittedAt: '2024-12-15T10:00:00Z',
       scores: [
-        { questionId: 'q-bl-1', score: 4 }, 
-        { questionId: 'q-bl-2', score: 5 }, 
-        { questionId: 'q-prof-1', score: 5 },
-        { questionId: 'q-res-1', score: 4 }
+        { questionId: 'q-bl-1', score: 4 }, { questionId: 'q-bl-2', score: 5 }, { questionId: 'q-bl-3', score: 4 }, { questionId: 'q-bl-4', score: 5 },
+        { questionId: 'q-prof-1', score: 5 }, { questionId: 'q-prof-2', score: 4 }, { questionId: 'q-prof-3', score: 5 }, { questionId: 'q-prof-4', score: 5 },
+        { questionId: 'q-res-1', score: 4 }, { questionId: 'q-res-2', score: 5 }, { questionId: 'q-res-3', score: 4 }, { questionId: 'q-res-4', score: 5 },
+        { questionId: 'q-dis-1', score: 4 }, { questionId: 'q-dis-2', score: 5 }
       ]
     },
     {

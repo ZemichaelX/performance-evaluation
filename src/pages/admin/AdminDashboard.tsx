@@ -10,7 +10,7 @@ export const AdminDashboard = () => {
   const [selectedCycleId, setSelectedCycleId] = useState<string | null>(null);
 
   const activeCycles = cycles.filter(c => c.status === 'active');
-  const employees = users.filter((u: User) => u.role === 'employee');
+  const employees = users.filter((u: User) => u.role === 'employee' && u.status === 'active');
   const selectedCycle = cycles.find(c => c.id === selectedCycleId);
   
   // Calculate accurate progress based on orchestration (Self + Peers + Supervisor)

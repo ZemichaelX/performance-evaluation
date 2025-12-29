@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { Search, CheckCircle2, Clock, AlertCircle, Users, Calendar, TrendingUp } from 'lucide-react';
+import { Search, CheckCircle2, Clock, X, Users, Calendar, TrendingUp, ArrowLeft } from 'lucide-react';
 
 export const EvaluationStatus = () => {
   const { cycles, users, submissions, competencyFrameworks } = useStore();
@@ -21,7 +21,7 @@ export const EvaluationStatus = () => {
 
   // Calculate statistics for each cycle
   const getCycleStats = (cycleId: string) => {
-    const employees = users.filter(u => u.role === 'employee');
+    const employees = users.filter(u => u.role === 'employee' && u.status === 'active');
     const cycleSubmissions = submissions.filter(s => s.cycleId === cycleId);
     
     // Count employees who have completed their self-evaluation
@@ -100,7 +100,7 @@ export const EvaluationStatus = () => {
   });
 
   // Filter employees
-  const employees = users.filter(u => u.role === 'employee');
+  const employees = users.filter(u => u.role === 'employee' && u.status === 'active');
   const filteredEmployees = employees.filter(emp => {
     if (searchTerm && !emp.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     if (statusFilter !== 'all' && selectedCycle !== 'all') {
@@ -289,18 +289,24 @@ export const EvaluationStatus = () => {
         )}
 
         {/* Employee Status Table */}
+        {/* Employee Status Table */}
         {selectedCycle !== 'all' && (
-          <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-500">
-             {/* Back Button */}
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+             {/* Back Button - Now isolated from opacity/blur effects */}
              <button 
-               onClick={() => setSelectedCycle('all')}
-               className="mb-4 text-xs font-bold text-slate-500 hover:text-indigo-600 flex items-center gap-1 transition-colors"
+               onClick={() => {
+                 setSelectedCycle('all');
+                 setSelectedEmployee(null);
+               }}
+               className="mb-6 text-[11px] font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors uppercase tracking-wider cursor-pointer w-fit z-50 relative"
              >
                ← Back to Cycle Overview
              </button>
 
-            <div className="absolute -inset-2 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 rounded-[44px] opacity-20 blur-xl" />
-            <div className="relative bg-white/90 backdrop-blur-sm rounded-[40px] border border-slate-200/50 overflow-hidden shadow-lg">
+            <div className="relative">
+              {/* Decorative Overlay - Now contained within the table wrapper only */}
+              <div className="absolute -inset-2 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 rounded-[44px] opacity-20 blur-xl pointer-events-none" />
+              <div className="relative bg-white/90 backdrop-blur-sm rounded-[40px] border border-slate-200/50 overflow-hidden shadow-lg">
               <div className="p-6 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100/50 flex justify-between items-center">
                 <h2 className="text-2xl font-black text-slate-900 flex items-center gap-2">
                   <Users className="w-6 h-6 text-indigo-600" />
@@ -397,10 +403,11 @@ export const EvaluationStatus = () => {
 
               {filteredEmployees.length === 0 && (
                 <div className="text-center py-16">
-                  <AlertCircle className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                  <Search className="w-16 h-16 text-slate-300 mx-auto mb-4" />
                   <p className="text-lg font-bold text-slate-400">No employees found matching your filters</p>
                 </div>
               )}
+            </div>
             </div>
           </div>
         )}
@@ -410,15 +417,23 @@ export const EvaluationStatus = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
             <div className="bg-white rounded-[32px] shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
               <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white">
-                <div>
-                  <h2 className="text-2xl font-black text-slate-900">Evaluation Details</h2>
-                  <p className="text-slate-500 font-semibold">{selectedEmployee.name} • {cycles.find(c => c.id === selectedCycle)?.title}</p>
+                <div className="flex items-center gap-4">
+                  <button 
+                    onClick={() => setSelectedEmployee(null)}
+                    className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-blue-600 group"
+                  >
+                    <ArrowLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
+                  </button>
+                  <div>
+                    <h2 className="text-2xl font-black text-slate-900">Evaluation Details</h2>
+                    <p className="text-slate-500 font-semibold">{selectedEmployee.name} • {cycles.find(c => c.id === selectedCycle)?.title}</p>
+                  </div>
                 </div>
                 <button 
                   onClick={() => setSelectedEmployee(null)}
                   className="p-2 hover:bg-slate-100 rounded-full transition-colors"
                 >
-                  <AlertCircle className="w-6 h-6 text-slate-400 rotate-45" /> {/* Close Icon */}
+                  <X className="w-6 h-6 text-slate-400" />
                 </button>
               </div>
               
@@ -514,18 +529,34 @@ export const EvaluationStatus = () => {
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
           <div className="bg-white rounded-[32px] shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
             <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-indigo-50 to-white">
-              <div>
-                <h3 className="text-xl font-black text-slate-900">Submission Details</h3>
-                <p className="text-slate-500 font-bold text-sm">
-                  Evaluated by <span className="text-indigo-600">{viewingSubmission.evaluatorName}</span> • {new Date(viewingSubmission.date).toLocaleDateString()}
-                </p>
+              <div className="flex items-center gap-4">
+                 <button 
+                  onClick={() => setViewingSubmission(null)}
+                  className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-blue-600 group"
+                >
+                  <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                </button>
+                <div>
+                  <h3 className="text-xl font-black text-slate-900">Submission Details</h3>
+                  <p className="text-slate-500 font-bold text-sm">
+                    Evaluated by <span className="text-indigo-600">{viewingSubmission.evaluatorName}</span> • {new Date(viewingSubmission.date).toLocaleDateString()}
+                  </p>
+                </div>
               </div>
-              <button 
-                onClick={() => setViewingSubmission(null)}
-                className="p-2 hover:bg-slate-100 rounded-full transition-colors"
-              >
-                <AlertCircle className="w-6 h-6 text-slate-400 rotate-45" />
-              </button>
+              <div className="flex items-center gap-4">
+                 <div className="text-right hidden sm:block">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Average Score</p>
+                    <p className="text-2xl font-black text-indigo-600 leading-none">
+                      {(viewingSubmission.scores.reduce((a, b) => a + b.score, 0) / (viewingSubmission.scores.length || 1)).toFixed(1)} <span className="text-sm text-slate-400 font-bold">/ 5</span>
+                    </p>
+                 </div>
+                <button 
+                  onClick={() => setViewingSubmission(null)}
+                  className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+                >
+                  <X className="w-6 h-6 text-slate-400" />
+                </button>
+              </div>
             </div>
             
             <div className="p-6 overflow-y-auto space-y-4">
@@ -548,9 +579,9 @@ export const EvaluationStatus = () => {
             <div className="p-6 border-t border-slate-100 bg-slate-50">
               <button
                 onClick={() => setViewingSubmission(null)}
-                className="w-full py-3 font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-lg shadow-indigo-200"
+                className="w-full py-4 font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-lg shadow-blue-100 uppercase tracking-wider text-[11px]"
               >
-                Close View
+                ← Back to Evaluation Summary
               </button>
             </div>
           </div>

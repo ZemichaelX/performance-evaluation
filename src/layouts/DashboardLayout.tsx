@@ -49,12 +49,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, type
             )}
           </div>
 
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-200 flex-shrink-0">P</div>
-            <span className="text-xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">
-              Performance<span className="text-indigo-600">.</span>
-            </span>
-          </Link>
+
         </div>
 
         {/* User Profile Info - Light Theme */}
