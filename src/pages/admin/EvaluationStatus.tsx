@@ -121,7 +121,7 @@ export const EvaluationStatus = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
                 <h1 className="text-5xl font-black bg-gradient-to-r from-slate-900 via-blue-900 to-purple-900 bg-clip-text text-transparent tracking-tight leading-tight">
-                  Evaluation Status
+                  Evaluation Stats
                 </h1>
                 <p className="text-slate-600 font-semibold mt-2 flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-blue-500" />
