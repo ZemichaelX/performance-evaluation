@@ -247,7 +247,7 @@ export const CreateEvaluation = () => {
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-200">
                       <Target className="w-6 h-6 text-white" />
                     </div>
-                    Scope Selection
+                    User Selection
                   </h2>
                   <div className="relative group w-80">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
