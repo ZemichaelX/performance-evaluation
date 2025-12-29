@@ -19,7 +19,7 @@ function App() {
         
         {/* Employee Routes */}
         <Route path="/employee/*" element={
-          currentUser?.role === 'employee' ? (
+          (currentUser?.role === 'employee' || currentUser?.role === 'manager') ? (
             <DashboardLayout type="employee">
               <Routes>
                 <Route path="dashboard" element={<EmployeeDashboard />} />

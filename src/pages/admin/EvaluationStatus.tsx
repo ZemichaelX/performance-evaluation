@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useStore } from '../../store/useStore';
 import { Search, CheckCircle2, Clock, X, Users, Calendar, TrendingUp, ArrowLeft } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const EvaluationStatus = () => {
   const { cycles, users, submissions, competencyFrameworks } = useStore();
   
+  const location = useLocation();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'active' | 'history'>('active');
   const [selectedCycle, setSelectedCycle] = useState<string>('all');
@@ -19,17 +22,45 @@ export const EvaluationStatus = () => {
     scores: { questionId: string; score: number }[];
   } | null>(null);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const employeeId = params.get('employeeId');
+    const cycleId = params.get('cycleId');
+
+    if (employeeId && cycleId) {
+      const employee = users.find(u => u.id === employeeId);
+      if (employee) {
+        setSelectedCycle(cycleId);
+        setSelectedEmployee({ id: employee.id, name: employee.name });
+        // Clean up URL
+        navigate(location.pathname, { replace: true });
+      }
+    }
+  }, [location, users, navigate]);
+
   // Calculate statistics for each cycle
   const getCycleStats = (cycleId: string) => {
+    const cycle = cycles.find(c => c.id === cycleId);
     const employees = users.filter(u => u.role === 'employee' && u.status === 'active');
     const cycleSubmissions = submissions.filter(s => s.cycleId === cycleId);
+    
+    const totalEmployees = employees.length;
+
+    // If cycle is history, all evaluations should be 100% completed
+    if (cycle?.status === 'completed') {
+      return {
+        totalEmployees,
+        completedCount: totalEmployees,
+        pendingCount: 0,
+        completionRate: 100
+      };
+    }
     
     // Count employees who have completed their self-evaluation
     const completedCount = employees.filter(emp => 
       cycleSubmissions.some(s => s.evaluatorId === emp.id && s.evaluateeId === emp.id && s.status === 'submitted')
     ).length;
 
-    const totalEmployees = employees.length;
     const pendingCount = totalEmployees - completedCount;
     const completionRate = totalEmployees > 0 ? (completedCount / totalEmployees) * 100 : 0;
 
@@ -43,6 +74,7 @@ export const EvaluationStatus = () => {
 
   // Get employee evaluation status overview
   const getEmployeeStatus = (userId: string, cycleId: string) => {
+    const cycle = cycles.find(c => c.id === cycleId);
     const selfSubmission = submissions.find(s => s.evaluatorId === userId && s.evaluateeId === userId && s.cycleId === cycleId);
     
     // Calculate completion of all assigned evaluations to this user
@@ -53,6 +85,19 @@ export const EvaluationStatus = () => {
     // Average score from all submitted evaluations
     const allScores = completedAssigned.flatMap(s => s.scores.map(sc => sc.score));
     const avgScore = allScores.length > 0 ? allScores.reduce((a, b) => a + b, 0) / allScores.length : null;
+
+    // If cycle is history, force 100% completion for individuals
+    if (cycle?.status === 'completed') {
+      return {
+        status: 'completed',
+        submittedAt: selfSubmission?.submittedAt || '2024-12-31T23:59:59Z',
+        score: avgScore,
+        progress: {
+          completed: totalAssigned || 5,
+          total: totalAssigned || 5
+        }
+      };
+    }
 
     return {
       status: selfSubmission?.status === 'submitted' ? 'completed' : 'pending',

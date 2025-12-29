@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bell, Zap, Clock, ChevronRight } from 'lucide-react';
+import { Bell, Zap, Clock, ChevronRight, CheckCircle2, Users } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -75,46 +75,91 @@ export const NotificationDropdown = () => {
               </div>
             ) : (
               <div className="divide-y divide-slate-50">
-                {/* Self Evaluation Notification */}
-                {showSelfEval && (
-                  <button 
-                    onClick={() => handleAction('self')}
-                    className="w-full text-left p-4 hover:bg-slate-50 transition-colors group flex gap-4"
-                  >
-                    <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl h-fit group-hover:scale-110 transition-transform">
-                      <Zap className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900 text-sm mb-0.5">Annual Evaluation Open</h4>
-                      <p className="text-xs text-slate-500 font-medium leading-relaxed mb-2">Self-evaluation for {activeCycle?.title} is now available.</p>
-                      <span className="text-[10px] font-black text-blue-600 uppercase tracking-wider flex items-center gap-1">
-                        Start Now <ChevronRight className="w-3 h-3" />
-                      </span>
-                    </div>
-                  </button>
+                {/* Admin Notifications */}
+                {currentUser.role === 'admin' && (
+                  <>
+                    <button 
+                      onClick={() => { setIsOpen(false); navigate('/admin/status?employeeId=emp1&cycleId=cycle-2025-annual'); }}
+                      className="w-full text-left p-4 hover:bg-slate-50 transition-colors group flex gap-4"
+                    >
+                      <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl h-fit group-hover:scale-110 transition-transform">
+                        <CheckCircle2 className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900 text-sm mb-0.5">Self-Audit Finalized</h4>
+                        <p className="text-xs text-slate-500 font-medium leading-relaxed mb-2">
+                          <span className="text-slate-900 font-bold">Abebe Kebede</span> has submitted their self-evaluation.
+                        </p>
+                        <span className="text-[10px] font-black text-blue-600 uppercase tracking-wider flex items-center gap-1">
+                          View Audit <ChevronRight className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </button>
+                    <button 
+                      onClick={() => { setIsOpen(false); navigate('/admin/status?employeeId=emp2&cycleId=cycle-2025-annual'); }}
+                      className="w-full text-left p-4 hover:bg-slate-50 transition-colors group flex gap-4"
+                    >
+                      <div className="p-2.5 bg-purple-50 text-purple-600 rounded-xl h-fit group-hover:scale-110 transition-transform">
+                        <Users className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900 text-sm mb-0.5">Peer Reviews Committed</h4>
+                        <p className="text-xs text-slate-500 font-medium leading-relaxed mb-2">
+                          <span className="text-slate-900 font-bold">Bethlehem Tadesse</span> completed all peer assessments.
+                        </p>
+                        <span className="text-[10px] font-black text-purple-600 uppercase tracking-wider flex items-center gap-1">
+                          Inspect Records <ChevronRight className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </button>
+                  </>
                 )}
 
-                {/* Pending Reviews Notifications */}
-                {pendingReviews.map(review => (
-                  <button 
-                    key={review.id}
-                    onClick={() => handleAction('evaluate', review.id)}
-                    className="w-full text-left p-4 hover:bg-slate-50 transition-colors group flex gap-4"
-                  >
-                    <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl h-fit group-hover:scale-110 transition-transform">
-                      <Clock className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900 text-sm mb-0.5">Action Required</h4>
-                      <p className="text-xs text-slate-500 font-medium leading-relaxed mb-2">
-                        Complete {review.type} review for <span className="text-slate-900 font-bold">Concept ID #{review.evaluateeId.slice(-4)}</span>
-                      </p>
-                      <span className="text-[10px] font-black text-amber-600 uppercase tracking-wider flex items-center gap-1">
-                        Review Now <ChevronRight className="w-3 h-3" />
-                      </span>
-                    </div>
-                  </button>
-                ))}
+                {/* Employee Notifications */}
+                {currentUser.role !== 'admin' && (
+                  <>
+                    {/* Self Evaluation Notification */}
+                    {showSelfEval && (
+                      <button 
+                        onClick={() => handleAction('self')}
+                        className="w-full text-left p-4 hover:bg-slate-50 transition-colors group flex gap-4"
+                      >
+                        <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl h-fit group-hover:scale-110 transition-transform">
+                          <Zap className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm mb-0.5">Annual Evaluation Open</h4>
+                          <p className="text-xs text-slate-500 font-medium leading-relaxed mb-2">Self-evaluation for {activeCycle?.title} is now available.</p>
+                          <span className="text-[10px] font-black text-blue-600 uppercase tracking-wider flex items-center gap-1">
+                            Start Now <ChevronRight className="w-3 h-3" />
+                          </span>
+                        </div>
+                      </button>
+                    )}
+
+                    {/* Pending Reviews Notifications */}
+                    {pendingReviews.map(review => (
+                      <button 
+                        key={review.id}
+                        onClick={() => handleAction('evaluate', review.id)}
+                        className="w-full text-left p-4 hover:bg-slate-50 transition-colors group flex gap-4"
+                      >
+                        <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl h-fit group-hover:scale-110 transition-transform">
+                          <Clock className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm mb-0.5">Action Required</h4>
+                          <p className="text-xs text-slate-500 font-medium leading-relaxed mb-2">
+                            Complete {review.type} review for <span className="text-slate-900 font-bold">Concept ID #{review.evaluateeId.slice(-4)}</span>
+                          </p>
+                          <span className="text-[10px] font-black text-amber-600 uppercase tracking-wider flex items-center gap-1">
+                            Review Now <ChevronRight className="w-3 h-3" />
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </>
+                )}
               </div>
             )}
           </div>

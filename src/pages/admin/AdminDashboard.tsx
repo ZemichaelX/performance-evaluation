@@ -236,22 +236,25 @@ export const AdminDashboard = () => {
             <div className="absolute left-10 top-16 bottom-16 w-px bg-slate-50" />
             
             <ActivityItem 
-              user="Alex Rivera" 
+              user="Abebe Kebede" 
               action="finalized self-audit" 
               time="2h ago" 
               avatar="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e" 
+              onClick={() => navigate('/admin/status?employeeId=emp1&cycleId=cycle-2025-annual')}
             />
             <ActivityItem 
-              user="Sarah Chen" 
+              user="Bethlehem Tadesse" 
               action="committed peer reviews" 
               time="5h ago" 
-              avatar="https://images.unsplash.com/photo-1494790108377-be9c29b29330" 
+              avatar="https://images.unsplash.com/photo-1438761681033-6461ffad8d80" 
+              onClick={() => navigate('/admin/status?employeeId=emp2&cycleId=cycle-2025-annual')}
             />
             <ActivityItem 
-              user="Marcus Thorne" 
+              user="Dawit Mengistu" 
               action="launched department evaluation" 
               time="1d ago" 
               avatar="https://images.unsplash.com/photo-1500648767791-00dcc994a43e" 
+              onClick={() => navigate('/admin/status?employeeId=emp3&cycleId=cycle-2025-annual')}
             />
           </div>
         </aside>
@@ -275,12 +278,15 @@ const StatCard = ({ label, value, icon, gradient, bgGradient }: any) => (
   </div>
 );
 
-const ActivityItem = ({ user, action, time, avatar }: any) => (
-  <div className="flex gap-6 relative z-10 transition-all hover:translate-x-1 group">
-    <img src={avatar} alt="" className="w-12 h-12 rounded-2xl object-cover shadow-sm ring-4 ring-white" />
+const ActivityItem = ({ user, action, time, avatar, onClick }: any) => (
+  <div 
+    onClick={onClick}
+    className="flex gap-6 relative z-10 transition-all hover:translate-x-1 group cursor-pointer"
+  >
+    <img src={avatar} alt="" className="w-12 h-12 rounded-2xl object-cover shadow-sm ring-4 ring-white group-hover:ring-blue-100 transition-all" />
     <div className="flex-1 min-w-0">
       <p className="text-sm font-semibold text-slate-900 leading-tight">
-        <span className="font-black text-blue-600">{user}</span> {action}
+        <span className="font-black text-blue-600 transition-colors group-hover:text-blue-700">{user}</span> {action}
       </p>
       <p className="text-xs font-black text-slate-400 uppercase tracking-widest mt-1.5">{time}</p>
     </div>
