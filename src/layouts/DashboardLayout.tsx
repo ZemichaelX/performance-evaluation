@@ -28,12 +28,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, type
         <div className="max-w-[1400px] mx-auto px-8 h-full flex items-center justify-between">
           <div className="flex items-center gap-10">
             {/* Strategize Brand Logo */}
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-100 group-hover:scale-105 transition-transform duration-300">
-                <div className="w-5 h-5 border-4 border-white rounded-full border-t-transparent animate-[spin_3s_linear_infinite]" />
-              </div>
-              <span className="text-2xl font-black text-slate-900 tracking-tighter">
-                Strategize<span className="text-blue-600">.</span>
+            <Link to="/" className="group">
+              <span className="text-2xl font-black bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent tracking-tighter">
+                Strategize<span className="text-blue-500">.</span>
               </span>
             </Link>
           </div>
