@@ -6,6 +6,8 @@ import { EvaluationHistory } from './pages/employee/History';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { CreateEvaluation } from './pages/admin/CreateEvaluation';
 import { Management } from './pages/admin/Management';
+import { FrameworkManagement } from './pages/admin/FrameworkManagement';
+import { EvaluationStatus } from './pages/admin/EvaluationStatus';
 import { DashboardLayout } from './layouts/DashboardLayout';
 
 function App() {
@@ -41,6 +43,8 @@ function App() {
               <Routes>
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="create-evaluation" element={<CreateEvaluation />} />
+                <Route path="status" element={<EvaluationStatus />} />
+                <Route path="frameworks" element={<FrameworkManagement />} />
                 <Route path="management" element={<Management />} />
                 <Route path="*" element={<Navigate to="dashboard" />} />
               </Routes>

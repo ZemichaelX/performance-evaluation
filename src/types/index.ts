@@ -56,7 +56,7 @@ export interface EvaluationSubmission {
   evaluatorId: string;
   evaluateeId: string;
   cycleId: string;
-  type: 'self' | 'peer' | 'supervisor';
+  type: 'self' | 'peer' | 'supervisor' | 'subordinate';
   status: 'pending' | 'submitted';
   submittedAt?: string;
   scores: CompetencyScore[];

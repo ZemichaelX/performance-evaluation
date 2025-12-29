@@ -686,7 +686,7 @@ export const CreateEvaluation = () => {
                        }}
                        className="text-indigo-600 text-sm font-bold flex items-center gap-2 px-5 py-2.5 bg-white rounded-xl shadow-sm border border-slate-100 transition-all hover:shadow-md active:scale-95"
                      >
-                        <Plus className="w-5 h-5" /> New Custom Collection
+                        <Plus className="w-5 h-5" /> New Competency Collection
                      </button>
                    </h3>
                    

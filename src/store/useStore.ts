@@ -16,10 +16,12 @@ interface AppState {
   submitEvaluation: (submission: EvaluationSubmission) => void;
   createCycle: (cycle: EvaluationCycle) => void;
   addCompetencyFramework: (framework: CompetencyFramework) => void;
+  updateCompetencyFramework: (id: string, updates: Partial<CompetencyFramework>) => void;
+  deleteCompetencyFramework: (id: string) => void;
   getEmployeeObjectives: (userId: string, cycleId: string) => Objective[];
   getObjectKPIs: (objectiveId: string) => KPI[];
   getEmployeeSubmissions: (userId: string, cycleId: string) => EvaluationSubmission[];
-  deployEvaluationCycle: (cycle: EvaluationCycle, assignments: Record<string, { peerIds: string[], supervisorIds: string[] }>) => void;
+  deployEvaluationCycle: (cycle: EvaluationCycle, assignments: Record<string, { peerIds: string[], supervisorIds: string[], subordinateIds: string[] }>) => void;
 }
 
 // MOCK DATA
@@ -308,6 +310,20 @@ export const useStore = create<AppState>((set, get) => ({
     }));
   },
 
+  updateCompetencyFramework: (id: string, updates: Partial<CompetencyFramework>) => {
+    set((state) => ({
+      competencyFrameworks: state.competencyFrameworks.map(fw =>
+        fw.id === id ? { ...fw, ...updates } : fw
+      )
+    }));
+  },
+
+  deleteCompetencyFramework: (id: string) => {
+    set((state) => ({
+      competencyFrameworks: state.competencyFrameworks.filter(fw => fw.id !== id)
+    }));
+  },
+
   getEmployeeObjectives: (userId: string, cycleId: string) => {
     return get().objectives.filter(o => o.userId === userId && o.cycleId === cycleId);
   },
@@ -323,7 +339,7 @@ export const useStore = create<AppState>((set, get) => ({
   deployEvaluationCycle: (cycle, assignments) => {
     const newSubmissions: EvaluationSubmission[] = [];
     
-    Object.entries(assignments).forEach(([evaluateeId, { peerIds, supervisorIds }]) => {
+    Object.entries(assignments).forEach(([evaluateeId, { peerIds, supervisorIds, subordinateIds }]) => {
       // 1. Self Evaluation
       newSubmissions.push({
         id: `sub-self-${Date.now()}-${evaluateeId}`,
@@ -356,6 +372,19 @@ export const useStore = create<AppState>((set, get) => ({
           evaluateeId,
           cycleId: cycle.id,
           type: 'supervisor',
+          status: 'pending',
+          scores: []
+        });
+      });
+
+      // 4. Subordinate Evaluations
+      subordinateIds?.forEach(subId => {
+        newSubmissions.push({
+          id: `sub-sub-${Date.now()}-${evaluateeId}-${subId}`,
+          evaluatorId: subId,
+          evaluateeId,
+          cycleId: cycle.id,
+          type: 'subordinate',
           status: 'pending',
           scores: []
         });
