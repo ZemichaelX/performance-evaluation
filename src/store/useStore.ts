@@ -291,6 +291,162 @@ export const useStore = create<AppState>((set, get) => ({
       status: 'submitted',
       submittedAt: '2025-12-26T09:00:00Z',
       scores: [{ questionId: 'q-bl-1', score: 5 }, { questionId: 'q-bl-2', score: 4 }, { questionId: 'q-prof-1', score: 4 }]
+    },
+    // History Cycle Submissions (Q4 2024)
+    {
+      id: 'hist-self-1',
+      evaluatorId: 'emp1',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2024-q4',
+      type: 'self',
+      status: 'submitted',
+      submittedAt: '2024-12-15T10:00:00Z',
+      scores: [
+        { questionId: 'q-bl-1', score: 4 }, 
+        { questionId: 'q-bl-2', score: 5 }, 
+        { questionId: 'q-prof-1', score: 5 },
+        { questionId: 'q-res-1', score: 4 }
+      ]
+    },
+    {
+      id: 'hist-peer-1',
+      evaluatorId: 'emp2',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2024-q4',
+      type: 'peer',
+      status: 'submitted',
+      submittedAt: '2024-12-16T14:30:00Z',
+      scores: [
+        { questionId: 'q-bl-1', score: 5 }, 
+        { questionId: 'q-bl-2', score: 4 }, 
+        { questionId: 'q-prof-1', score: 5 }
+      ]
+    },
+    {
+      id: 'hist-sup-1',
+      evaluatorId: 'admin1',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2024-q4',
+      type: 'supervisor',
+      status: 'submitted',
+      submittedAt: '2024-12-20T09:15:00Z',
+      scores: [
+        { questionId: 'q-bl-1', score: 5 }, 
+        { questionId: 'q-bl-2', score: 5 }, 
+        { questionId: 'q-prof-1', score: 5 },
+        { questionId: 'q-lorg-1', score: 4 }
+      ]
+    },
+    // Additional History Submissions for 100% Completion
+    {
+      id: 'hist-self-2',
+      evaluatorId: 'emp2',
+      evaluateeId: 'emp2',
+      cycleId: 'cycle-2024-q4',
+      type: 'self',
+      status: 'submitted',
+      submittedAt: '2024-12-14T11:00:00Z',
+      scores: [{ questionId: 'q-bl-1', score: 5 }]
+    },
+    {
+      id: 'hist-self-3',
+      evaluatorId: 'emp3',
+      evaluateeId: 'emp3',
+      cycleId: 'cycle-2024-q4',
+      type: 'self',
+      status: 'submitted',
+      submittedAt: '2024-12-15T16:00:00Z',
+      scores: [{ questionId: 'q-bl-1', score: 4 }]
+    },
+    // --- Active Cycle (2025) Additional Submissions ---
+    {
+      id: 'sub-self-1',
+      evaluatorId: 'emp1',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2025-annual',
+      type: 'self',
+      status: 'submitted',
+      submittedAt: '2025-12-24T10:00:00Z',
+      scores: [
+        { questionId: 'q-bl-1', score: 4 }, 
+        { questionId: 'q-prof-1', score: 5 },
+        { questionId: 'q-client-1', score: 4 }
+      ]
+    },
+    {
+      id: 'sub-self-2',
+      evaluatorId: 'emp2',
+      evaluateeId: 'emp2',
+      cycleId: 'cycle-2025-annual',
+      type: 'self',
+      status: 'submitted',
+      submittedAt: '2025-12-28T09:30:00Z',
+      scores: [{ questionId: 'q-bl-1', score: 3 }, { questionId: 'q-prof-1', score: 4 }]
+    },
+
+    // --- History Cycle (Annual 2024) - Fully Completed ---
+    {
+      id: 'hist-24-self-1',
+      evaluatorId: 'emp1',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2024-annual',
+      type: 'self',
+      status: 'submitted',
+      submittedAt: '2024-06-01T10:00:00Z',
+      scores: [{ questionId: 'q-bl-1', score: 5 }, { questionId: 'q-prof-1', score: 5 }]
+    },
+    {
+      id: 'hist-24-peer-1',
+      evaluatorId: 'emp2',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2024-annual',
+      type: 'peer',
+      status: 'submitted',
+      submittedAt: '2024-06-02T11:00:00Z',
+      scores: [{ questionId: 'q-bl-1', score: 4 }, { questionId: 'q-prof-1', score: 5 }]
+    },
+    {
+      id: 'hist-24-sup-1',
+      evaluatorId: 'admin1',
+      evaluateeId: 'emp1',
+      cycleId: 'cycle-2024-annual',
+      type: 'supervisor',
+      status: 'submitted',
+      submittedAt: '2024-06-05T09:00:00Z',
+      scores: [{ questionId: 'q-bl-1', score: 5 }, { questionId: 'q-prof-1', score: 5 }]
+    },
+    // Emp2 - 2024
+    {
+      id: 'hist-24-self-2',
+      evaluatorId: 'emp2',
+      evaluateeId: 'emp2',
+      cycleId: 'cycle-2024-annual',
+      type: 'self',
+      status: 'submitted',
+      submittedAt: '2024-06-01T14:00:00Z',
+      scores: [{ questionId: 'q-bl-1', score: 4 }]
+    },
+    // Emp3 - 2024 (Marcus)
+    {
+      id: 'hist-24-self-3',
+      evaluatorId: 'emp3',
+      evaluateeId: 'emp3',
+      cycleId: 'cycle-2024-annual',
+      type: 'self',
+      status: 'submitted',
+      submittedAt: '2024-06-03T16:00:00Z',
+      scores: [{ questionId: 'q-bl-1', score: 3 }]
+    },
+    // Emp4 - 2024 (Amara)
+    {
+      id: 'hist-24-self-4',
+      evaluatorId: 'emp4',
+      evaluateeId: 'emp4',
+      cycleId: 'cycle-2024-annual',
+      type: 'self',
+      status: 'submitted',
+      submittedAt: '2024-05-20T10:00:00Z',
+      scores: [{ questionId: 'q-bl-1', score: 4 }]
     }
   ],
   competencyFrameworks: MOCK_FRAMEWORKS,
