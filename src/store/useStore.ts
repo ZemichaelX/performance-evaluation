@@ -163,6 +163,16 @@ const MOCK_CYCLES: EvaluationCycle[] = [
     status: 'completed',
     weights: { own: 50, shared: 50 },
     competencies: { behavioral: true, technical: true, leadership: false }
+  },
+  {
+    id: 'cycle-2024-q4',
+    title: 'Q4 2024 Performance Review',
+    startDate: '2024-10-01',
+    endDate: '2024-12-31',
+    type: 'annual',
+    status: 'completed',
+    weights: { own: 40, shared: 30 },
+    competencies: { behavioral: true, technical: true, leadership: false }
   }
 ];
 
