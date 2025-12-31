@@ -66,7 +66,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, type
       </nav>
 
       {/* Primary Navigation Tabs - Light Theme */}
-      <div className="bg-white/50 border-b border-slate-100/60 sticky top-20 z-40">
+      <div className="bg-white border-b border-slate-100/60 sticky top-20 z-40 shadow-sm">
         <div className="max-w-[1400px] mx-auto px-8 flex gap-10">
           {type === 'employee' ? (
             <>
