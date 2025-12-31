@@ -210,37 +210,36 @@ const MOCK_FRAMEWORKS: CompetencyFramework[] = [
     name: 'Behavioral Competency',
     description: 'Core behavioral expectations and organizational values',
     questions: [
-      // 1.1 Thought Leadership
-      { id: 'q-bl-1', category: '1.1 Thought Leadership', text: 'Regularly introduces new ideas and approaches, fostering an environment of innovation.' },
-      { id: 'q-bl-2', category: '1.1 Thought Leadership', text: 'Demonstrates deep understanding of industry trends and anticipates future challenges/opportunities.' },
-      { id: 'q-bl-3', category: '1.1 Thought Leadership', text: 'Inspires others through vision and expertise, influencing stakeholders and driving growth.' },
-      { id: 'q-bl-4', category: '1.1 Thought Leadership', text: 'Willing to share knowledge, expertise, and tools to guide colleagues toward development.' },
+      { id: 'q-bl-1', text: 'Regularly introduces new ideas and approaches, fostering an environment of innovation.' },
+      { id: 'q-bl-2', text: 'Demonstrates deep understanding of industry trends and anticipates future challenges/opportunities.' },
+      { id: 'q-bl-3', text: 'Inspires others through vision and expertise, influencing stakeholders and driving growth.' },
+      { id: 'q-bl-4', text: 'Willing to share knowledge, expertise, and tools to guide colleagues toward development.' },
       // 1.2 Professionalism
-      { id: 'q-prof-1', category: '1.2 Professionalism', text: 'Consistently adheres to ethical standards and promotes integrity within the organization.' },
-      { id: 'q-prof-2', category: '1.2 Professionalism', text: 'Takes responsibility for actions and decisions, ensuring transparency and reliability.' },
-      { id: 'q-prof-3', category: '1.2 Professionalism', text: 'Maintains high standards of work quality and continuously seeks performance improvements.' },
-      { id: 'q-prof-4', category: '1.2 Professionalism', text: 'Shows exemplary character by being punctual to work, meetings, and deadlines.' },
-      { id: 'q-prof-5', category: '1.2 Professionalism', text: 'Makes effective use of organizational time and resources for the sole purpose of duties.' },
+      { id: 'q-prof-1', text: 'Consistently adheres to ethical standards and promotes integrity within the organization.' },
+      { id: 'q-prof-2', text: 'Takes responsibility for actions and decisions, ensuring transparency and reliability.' },
+      { id: 'q-prof-3', text: 'Maintains high standards of work quality and continuously seeks performance improvements.' },
+      { id: 'q-prof-4', text: 'Shows exemplary character by being punctual to work, meetings, and deadlines.' },
+      { id: 'q-prof-5', text: 'Makes effective use of organizational time and resources for the sole purpose of duties.' },
       // 1.3 Client Centricity
-      { id: 'q-client-1', category: '1.3 Client Centricity', text: 'Prioritizes needs and expectations of clients, ensuring requirements are met or exceeded.' },
-      { id: 'q-client-2', category: '1.3 Client Centricity', text: 'Contributes to building long-term relationships and providing tailored client solutions.' },
-      { id: 'q-client-3', category: '1.3 Client Centricity', text: 'Demonstrates commitment to outstanding service, proactively addressing client feedback.' },
+      { id: 'q-client-1', text: 'Prioritizes needs and expectations of clients, ensuring requirements are met or exceeded.' },
+      { id: 'q-client-2', text: 'Contributes to building long-term relationships and providing tailored client solutions.' },
+      { id: 'q-client-3', text: 'Demonstrates commitment to outstanding service, proactively addressing client feedback.' },
       // 1.4 Results Orientation
-      { id: 'q-res-1', category: '1.4 Results Orientation', text: 'Sets clear, measurable goals and consistently works towards achieving them.' },
-      { id: 'q-res-2', category: '1.4 Results Orientation', text: 'Implements PMS and regularly assesses performance using logbook data for decisions.' },
-      { id: 'q-res-3', category: '1.4 Results Orientation', text: 'Demonstrates determination and resilience in the face of challenges to meet objectives.' },
-      { id: 'q-res-4', category: '1.4 Results Orientation', text: 'Prioritizes organizational interests and goals over personal interests.' },
+      { id: 'q-res-1', text: 'Sets clear, measurable goals and consistently works towards achieving them.' },
+      { id: 'q-res-2', text: 'Implements PMS and regularly assesses performance using logbook data for decisions.' },
+      { id: 'q-res-3', text: 'Demonstrates determination and resilience in the face of challenges to meet objectives.' },
+      { id: 'q-res-4', text: 'Prioritizes organizational interests and goals over personal interests.' },
       // 1.5 Connectedness
-      { id: 'q-conn-1', category: '1.5 Connectedness', text: 'Actively seeks and values input from others, promoting teamwork and cooperation.' },
-      { id: 'q-conn-2', category: '1.5 Connectedness', text: 'Establishes and maintains a wide network of contacts inside and outside for mutual benefit.' },
-      { id: 'q-conn-3', category: '1.5 Connectedness', text: 'Communicates effectively across all levels, ensuring clarity and understanding.' },
-      { id: 'q-conn-4', category: '1.5 Connectedness', text: 'Respects supervisors and peers, shows interest in connecting with others.' },
-      { id: 'q-conn-5', category: '1.5 Connectedness', text: 'Spreads positive energy by avoiding office politics and discouraging statements.' },
+      { id: 'q-conn-1', text: 'Actively seeks and values input from others, promoting teamwork and cooperation.' },
+      { id: 'q-conn-2', text: 'Establishes and maintains a wide network of contacts inside and outside for mutual benefit.' },
+      { id: 'q-conn-3', text: 'Communicates effectively across all levels, ensuring clarity and understanding.' },
+      { id: 'q-conn-4', text: 'Respects supervisors and peers, shows interest in connecting with others.' },
+      { id: 'q-conn-5', text: 'Spreads positive energy by avoiding office politics and discouraging statements.' },
       // 1.6 Disruption
-      { id: 'q-dis-1', category: '1.6 Disruption', text: 'Adapts quickly to change, avoids resistance, and continuously challenges the status quo.' },
-      { id: 'q-dis-2', category: '1.6 Disruption', text: 'Seeks opportunities to improve processes, questioning methods and proposing alternatives.' },
-      { id: 'q-dis-3', category: '1.6 Disruption', text: 'Takes calculated risks to drive progress, learning from both successes and failures.' },
-      { id: 'q-dis-4', category: '1.6 Disruption', text: 'Has the ability to continually learn, unlearn, and relearn.' }
+      { id: 'q-dis-1', text: 'Adapts quickly to change, avoids resistance, and continuously challenges the status quo.' },
+      { id: 'q-dis-2', text: 'Seeks opportunities to improve processes, questioning methods and proposing alternatives.' },
+      { id: 'q-dis-3', text: 'Takes calculated risks to drive progress, learning from both successes and failures.' },
+      { id: 'q-dis-4', text: 'Has the ability to continually learn, unlearn, and relearn.' }
     ]
   },
   {
@@ -249,25 +248,25 @@ const MOCK_FRAMEWORKS: CompetencyFramework[] = [
     description: 'Departmental and domain-specific technical skills',
     questions: [
       // 2.1 Plan
-      { id: 'q-plan-1', category: '2.1 Plan', text: 'Lead the preparation of operations unit strategic and operational plan.' },
-      { id: 'q-plan-2', category: '2.1 Plan', text: 'Lead the preparation of operations unit annual budget.' },
-      { id: 'q-plan-3', category: '2.1 Plan', text: 'Ensure timely and robust reports about advisory, learning, and knowledge solutions.' },
+      { id: 'q-plan-1', text: 'Lead the preparation of operations unit strategic and operational plan.' },
+      { id: 'q-plan-2', text: 'Lead the preparation of operations unit annual budget.' },
+      { id: 'q-plan-3', text: 'Ensure timely and robust reports about advisory, learning, and knowledge solutions.' },
       // 2.2 Design
-      { id: 'q-des-1', category: '2.2 Design', text: 'Lead the design of in-house customized methods, tools, and frameworks for projects.' },
-      { id: 'q-des-2', category: '2.2 Design', text: 'Stay up-to-date with industry trends and best practices related to unit solutions.' },
-      { id: 'q-des-3', category: '2.2 Design', text: 'Continuously refine and develop methods in line with industry/business priorities.' },
+      { id: 'q-des-1', text: 'Lead the design of in-house customized methods, tools, and frameworks for projects.' },
+      { id: 'q-des-2', text: 'Stay up-to-date with industry trends and best practices related to unit solutions.' },
+      { id: 'q-des-3', text: 'Continuously refine and develop methods in line with industry/business priorities.' },
       // 2.3 Deliver
-      { id: 'q-del-1', category: '2.3 Deliver', text: 'Lead the execution of activities involved in the delivery of operations solutions.' },
+      { id: 'q-del-1', text: 'Lead the execution of activities involved in the delivery of operations solutions.' },
       // 2.4 Review
-      { id: 'q-rev-1', category: '2.4 Review', text: 'Lead the measurement of effectiveness and impact on performance indicators.' },
-      { id: 'q-rev-2', category: '2.4 Review', text: 'Evaluate unit performance and recommend strategic improvements to CEO.' },
+      { id: 'q-rev-1', text: 'Lead the measurement of effectiveness and impact on performance indicators.' },
+      { id: 'q-rev-2', text: 'Evaluate unit performance and recommend strategic improvements to CEO.' },
       // 2.5 Lead
-      { id: 'q-lead-1', category: '2.5 Lead', text: 'Assign and lead teams across needs assessment, instructional design, and delivery.' },
-      { id: 'q-lead-2', category: '2.5 Lead', text: 'Develop capacity of line managers through continuous coaching and mentorship.' },
+      { id: 'q-lead-1', text: 'Assign and lead teams across needs assessment, instructional design, and delivery.' },
+      { id: 'q-lead-2', text: 'Develop capacity of line managers through continuous coaching and mentorship.' },
       // 2.6 Collaborate
-      { id: 'q-coll-1', category: '2.6 Collaborate', text: 'Lead collaboration with clients to identify needs and develop aligned solutions.' },
-      { id: 'q-coll-2', category: '2.6 Collaborate', text: 'Collaborate with Marketing/Sales to prepare proposals and pitching documents.' },
-      { id: 'q-coll-3', category: '2.6 Collaborate', text: 'Identify and manage relationship with a sufficient pool of delivery partners.' }
+      { id: 'q-coll-1', text: 'Lead collaboration with clients to identify needs and develop aligned solutions.' },
+      { id: 'q-coll-2', text: 'Collaborate with Marketing/Sales to prepare proposals and pitching documents.' },
+      { id: 'q-coll-3', text: 'Identify and manage relationship with a sufficient pool of delivery partners.' }
     ]
   },
   {
@@ -276,19 +275,20 @@ const MOCK_FRAMEWORKS: CompetencyFramework[] = [
     description: 'Strategic leadership and people management protocols',
     questions: [
       // 3.1 Leading the Organization
-      { id: 'q-lorg-1', category: '3.1 Leading the Organization', text: 'Social Intelligence: knows when to talk/listen, what to say, and when to say it.' },
-      { id: 'q-lorg-2', category: '3.1 Leading the Organization', text: 'Problem-solving: able to use knowledge and experience to analyze problems.' },
-      { id: 'q-lorg-3', category: '3.1 Leading the Organization', text: 'Decision-making: knows when to consult team vs. peers vs. deciding independently.' },
-      { id: 'q-lorg-4', category: '3.1 Leading the Organization', text: 'Setting Vision: able to inspire others to translate vision into positive action.' },
-      { id: 'q-lorg-5', category: '3.1 Leading the Organization', text: 'Change Management: able to prepare and guide teams through organizational change.' },
-      { id: 'q-lorg-6', category: '3.1 Leading the Organization', text: 'Innovation: encourages subordinates to be creative and views failure as a precursor to success.' },
+      { id: 'q-lorg-1', text: 'Social Intelligence: knows when to talk/listen, what to say, and when to say it.' },
+      { id: 'q-lorg-2', text: 'Social Intelligence: knows when to talk/listen, what to say, and when to say it.' },
+      { id: 'q-lorg-2', text: 'Problem-solving: able to use knowledge and experience to analyze problems.' },
+      { id: 'q-lorg-3', text: 'Decision-making: knows when to consult team vs. peers vs. deciding independently.' },
+      { id: 'q-lorg-4', text: 'Setting Vision: able to inspire others to translate vision into positive action.' },
+      { id: 'q-lorg-5', text: 'Change Management: able to prepare and guide teams through organizational change.' },
+      { id: 'q-lorg-6', text: 'Innovation: encourages subordinates to be creative and views failure as a precursor to success.' },
       // 3.2 Leading Others
-      { id: 'q-loth-1', category: '3.2 Leading Others', text: 'Conflict Management: able to reduce and manage conflict for stronger performance.' },
-      { id: 'q-loth-2', category: '3.2 Leading Others', text: 'Interpersonal Skills: treats people with respect, active listening, and giving feedback.' },
-      { id: 'q-loth-3', category: '3.2 Leading Others', text: 'Emotional Intelligence: understands and manages own and others’ emotional situations.' },
-      { id: 'q-loth-4', category: '3.2 Leading Others', text: 'Coaching Ability: effective coach and mentor for team members and peers.' },
-      { id: 'q-loth-5', category: '3.2 Leading Others', text: 'Inclusivity: creates an environment where everyone feels welcome and treated equally.' },
-      { id: 'q-loth-6', category: '3.2 Leading Others', text: 'People Management: oversees training, motivation, and day-to-day management.' }
+      { id: 'q-loth-1', text: 'Conflict Management: able to reduce and manage conflict for stronger performance.' },
+      { id: 'q-loth-2', text: 'Interpersonal Skills: treats people with respect, active listening, and giving feedback.' },
+      { id: 'q-loth-3', text: 'Emotional Intelligence: understands and manages own and others’ emotional situations.' },
+      { id: 'q-loth-4', text: 'Coaching Ability: effective coach and mentor for team members and peers.' },
+      { id: 'q-loth-5', text: 'Inclusivity: creates an environment where everyone feels welcome and treated equally.' },
+      { id: 'q-loth-6', text: 'People Management: oversees training, motivation, and day-to-day management.' }
     ]
   }
 ];

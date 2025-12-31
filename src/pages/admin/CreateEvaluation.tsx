@@ -35,21 +35,21 @@ export const CreateEvaluation = () => {
         id: 'qc-1', 
         name: 'Behavioral Competencies', 
         frameworkId: 'fw-behavioral',
-        customQuestions: [] as { id: string, text: string, category: string }[],
+        customQuestions: [] as { id: string, text: string }[],
         overrides: {} as Record<string, string>
       },
       { 
         id: 'qc-2', 
         name: 'Technical Competencies', 
         frameworkId: 'fw-technical',
-        customQuestions: [] as { id: string, text: string, category: string }[],
+        customQuestions: [] as { id: string, text: string }[],
         overrides: {} as Record<string, string>
       },
       { 
         id: 'qc-3', 
         name: 'Leadership Competencies', 
         frameworkId: 'fw-leadership',
-        customQuestions: [] as { id: string, text: string, category: string }[],
+        customQuestions: [] as { id: string, text: string }[],
         overrides: {} as Record<string, string>
       }
     ],
@@ -158,7 +158,6 @@ export const CreateEvaluation = () => {
             ...frameworkQuestions,
             ...qc.customQuestions.map(q => ({
               id: q.id,
-              category: q.category,
               text: q.text
             }))
           ]
@@ -643,7 +642,7 @@ export const CreateEvaluation = () => {
                                 ...prev,
                                 questionCollections: [
                                   ...prev.questionCollections,
-                                  { id: newId, name: f.name, frameworkId: f.id, customQuestions: [] as { id: string, text: string, category: string }[], overrides: {} as Record<string, string> }
+                                  { id: newId, name: f.name, frameworkId: f.id, customQuestions: [] as { id: string, text: string }[], overrides: {} as Record<string, string> }
                                 ]
                               }));
                               // Expand new collection immediately
@@ -679,7 +678,7 @@ export const CreateEvaluation = () => {
                               ...prev, 
                               questionCollections: [
                                 ...prev.questionCollections, 
-                                { id: newId, name: 'Untitled Collection', frameworkId: '', customQuestions: [] as { id: string, text: string, category: string }[], overrides: {} as Record<string, string> }
+                                { id: newId, name: 'Untitled Collection', frameworkId: '', customQuestions: [] as { id: string, text: string }[], overrides: {} as Record<string, string> }
                               ] 
                           }));
                           setExpandedQCIds(prev => [...prev, newId]);

@@ -35,7 +35,6 @@ export interface KPI {
 
 export interface CompetencyQuestion {
   id: string;
-  category: string; // behavioral, technical, etc., but now flexible
   text: string;
 }
 

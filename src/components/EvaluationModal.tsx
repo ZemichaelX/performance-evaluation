@@ -73,7 +73,6 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
     }, 1200);
   };
 
-  const categories = Array.from(new Set(allQuestions.map(q => q.category))).sort();
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
@@ -105,47 +104,38 @@ export const EvaluationModal: React.FC<EvaluationModalProps> = ({
               <p>Your responses are encrypted and stored as immutable performance data. Review meticulously against industrial benchmarks.</p>
             </div>
 
-            {categories.map(cat => (
-              <div key={cat} className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
-                    {cat}
-                  </h3>
-                  <div className="h-px flex-1 bg-slate-100" />
-                </div>
-                
-                {allQuestions.filter(q => q.category === cat).map(q => (
-                  <div key={q.id} className="bg-white p-8 rounded-3xl border border-slate-100 hover:border-blue-200 transition-all group shadow-sm">
-                    <p className="text-slate-900 font-extrabold text-sm mb-6 leading-relaxed flex gap-4">
-                       <span className="text-blue-300">#</span>
-                       {q.text}
-                    </p>
-                    <div className="grid grid-cols-5 gap-3">
-                      {[
-                        {v: 5, l: 'Exceptional'},
-                        {v: 4, l: 'Effective'},
-                        {v: 3, l: 'Encouraging'},
-                        {v: 2, l: 'Satisfactory'},
-                        {v: 1, l: 'Low'}
-                      ].map(rating => (
-                        <button
-                          key={rating.v}
-                          onClick={() => handleScoreChange(q.id, rating.v)}
-                          className={`group/btn relative py-6 rounded-2xl font-black transition-all transform active:scale-95 flex flex-col items-center justify-center gap-1 ${
-                            scores[q.id] === rating.v 
-                              ? 'bg-blue-600 text-white shadow-xl shadow-blue-200 ring-4 ring-blue-50' 
-                              : 'bg-slate-50 text-slate-400 border border-slate-100 hover:border-blue-300 hover:text-blue-600'
-                          }`}
-                        >
-                          <span className="text-xl">{rating.v}</span>
-                          <span className={`text-[8px] uppercase tracking-tighter ${scores[q.id] === rating.v ? 'text-blue-100' : 'text-slate-400 group-hover/btn:text-blue-400'}`}>{rating.l}</span>
-                        </button>
-                      ))}
-                    </div>
+            <div className="space-y-6">
+              {allQuestions.map((q, qIdx) => (
+                <div key={q.id} className="bg-white p-8 rounded-3xl border border-slate-100 hover:border-blue-200 transition-all group shadow-sm">
+                  <p className="text-slate-900 font-extrabold text-sm mb-6 leading-relaxed flex gap-4">
+                     <span className="text-blue-300">#{qIdx + 1}</span>
+                     {q.text}
+                  </p>
+                  <div className="grid grid-cols-5 gap-3">
+                    {[
+                      {v: 5, l: 'Exceptional'},
+                      {v: 4, l: 'Effective'},
+                      {v: 3, l: 'Encouraging'},
+                      {v: 2, l: 'Satisfactory'},
+                      {v: 1, l: 'Low'}
+                    ].map(rating => (
+                      <button
+                        key={rating.v}
+                        onClick={() => handleScoreChange(q.id, rating.v)}
+                        className={`group/btn relative py-6 rounded-2xl font-black transition-all transform active:scale-95 flex flex-col items-center justify-center gap-1 ${
+                          scores[q.id] === rating.v 
+                            ? 'bg-blue-600 text-white shadow-xl shadow-blue-200 ring-4 ring-blue-50' 
+                            : 'bg-slate-50 text-slate-400 border border-slate-100 hover:border-blue-300 hover:text-blue-600'
+                        }`}
+                      >
+                        <span className="text-xl">{rating.v}</span>
+                        <span className={`text-[8px] uppercase tracking-tighter ${scores[q.id] === rating.v ? 'text-blue-100' : 'text-slate-400 group-hover/btn:text-blue-400'}`}>{rating.l}</span>
+                      </button>
+                    ))}
                   </div>
-                ))}
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
 
             <div className="h-px bg-slate-100" />
 

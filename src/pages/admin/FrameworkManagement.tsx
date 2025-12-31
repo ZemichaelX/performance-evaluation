@@ -72,12 +72,12 @@ export const FrameworkManagement = () => {
       ...formData,
       questions: [
         ...formData.questions,
-        { id: `q-${Date.now()}`, category: '', text: '' }
+        { id: `q-${Date.now()}`, text: '' }
       ]
     });
   };
 
-  const updateQuestion = (index: number, field: 'category' | 'text', value: string) => {
+  const updateQuestion = (index: number, field: 'text', value: string) => {
     const newQuestions = [...formData.questions];
     newQuestions[index] = { ...newQuestions[index], [field]: value };
     setFormData({ ...formData, questions: newQuestions });
@@ -177,13 +177,6 @@ export const FrameworkManagement = () => {
                         <div className="flex items-start gap-3">
                           <GripVertical className="w-5 h-5 text-slate-400 mt-2 flex-shrink-0" />
                           <div className="flex-1 space-y-3">
-                            <input
-                              type="text"
-                              value={q.category}
-                              onChange={(e) => updateQuestion(idx, 'category', e.target.value)}
-                              className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold focus:outline-none focus:border-blue-300"
-                              placeholder="Category (e.g., 1.1 Thought Leadership)"
-                            />
                             <textarea
                               value={q.text}
                               onChange={(e) => updateQuestion(idx, 'text', e.target.value)}
