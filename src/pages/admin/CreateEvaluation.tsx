@@ -819,7 +819,7 @@ export const CreateEvaluation = () => {
                                                     const copy = [...formData.questionCollections];
                                                     copy[idx].customQuestions = [
                                                       ...copy[idx].customQuestions,
-                                                      { id: `custom-${Date.now()}`, text: '', category: 'Custom' }
+                                                      { id: `custom-${Date.now()}`, text: '' }
                                                     ];
                                                     setFormData({...formData, questionCollections: copy});
                                                 }}
