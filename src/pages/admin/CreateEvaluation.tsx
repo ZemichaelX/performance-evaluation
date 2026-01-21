@@ -14,7 +14,10 @@ import {
   ChevronDown,
   ShieldCheck,
   Search,
-  Sparkles
+  Sparkles,
+  PieChart,
+  Percent,
+  TrendingUp
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -23,6 +26,16 @@ export const CreateEvaluation = () => {
   const { users, deployEvaluationCycle, objectives, getObjectKPIs, competencyFrameworks, addCompetencyFramework } = useStore();
   
   const [step, setStep] = useState(1);
+  const [performanceConfig, setPerformanceConfig] = useState({
+    ownPercentage: 55,
+    sharedPercentage: 45,
+    divisionWeights: {
+      "OD": 20,
+      "RMS": 15,
+      "KSP": 10
+    } as Record<string, number>,
+    locked: false
+  });
   const [formData, setFormData] = useState({
     title: 'Q1 Performance Review 2024',
     startDate: '2024-03-01',
@@ -179,7 +192,11 @@ export const CreateEvaluation = () => {
       status: 'active',
       weights: { own: 60, shared: 40 },
       competencies: { behavioral: true, technical: true, leadership: false },
-      customCompetencyFrameworkIds: finalFrameworkIds
+      customCompetencyFrameworkIds: finalFrameworkIds,
+      performanceConfig: {
+        ...performanceConfig,
+        locked: true  // Lock configuration after deployment
+      }
     }, formData.assignments);
     navigate('/admin/dashboard');
   };
@@ -350,6 +367,8 @@ export const CreateEvaluation = () => {
                     </table>
                   </div>
                 </div>
+
+
               </div>
             )}
 
@@ -523,60 +542,201 @@ export const CreateEvaluation = () => {
             </div>
           )}
 
+
+
           {step === 3 && (
             <div className="space-y-10 animate-in fade-in slide-in-from-right-4 duration-500 text-left">
               <h2 className="text-2xl font-black text-slate-900 flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
                   <ListChecks className="w-6 h-6" />
                 </div>
-                KPI Audit Verification
+                KPI Audit & Performance Configuration
               </h2>
 
+              {/* Global Performance Configuration */}
+              <div className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm space-y-6">
+                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                   <TrendingUp className="w-5 h-5 text-blue-600" />
+                   Performance Split (Global)
+                </h3>
+                
+                <div className="grid md:grid-cols-2 gap-8">
+                   {/* OWN Config */}
+                   <div className="space-y-4 p-4 bg-blue-50/30 rounded-2xl border border-blue-100">
+                      <div className="flex justify-between items-center">
+                         <label className="text-sm font-bold text-slate-700">OWN Percentage</label>
+                         <span className="text-2xl font-black text-blue-600">{performanceConfig.ownPercentage}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={performanceConfig.ownPercentage}
+                        onChange={(e) => {
+                          const ownVal = parseInt(e.target.value);
+                          setPerformanceConfig(prev => ({
+                            ...prev,
+                            ownPercentage: ownVal,
+                            sharedPercentage: 100 - ownVal
+                          }));
+                        }}
+                        className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                      <div className="text-xs font-bold text-slate-500 flex justify-between">
+                         <span>KPI Contribution: {(performanceConfig.ownPercentage * 0.75).toFixed(1)}%</span>
+                         <span>Competency: {(performanceConfig.ownPercentage * 0.25).toFixed(1)}%</span>
+                      </div>
+                   </div>
+
+                   {/* SHARED Config */}
+                   <div className="space-y-4 p-4 bg-purple-50/30 rounded-2xl border border-purple-100">
+                      <div className="flex justify-between items-center">
+                         <label className="text-sm font-bold text-slate-700">SHARED Percentage</label>
+                         <div className="text-right">
+                           <span className="text-2xl font-black text-purple-600">{performanceConfig.sharedPercentage}%</span>
+                           {/* Validation warning if weights don't match */}
+                           {Object.values(performanceConfig.divisionWeights).reduce((a,b) => a+b, 0) !== performanceConfig.sharedPercentage && (
+                             <p className="text-[10px] text-red-500 font-bold">Sum: {Object.values(performanceConfig.divisionWeights).reduce((a,b) => a+b, 0)}%</p>
+                           )}
+                         </div>
+                      </div>
+                      
+                      {/* Division Weights Inputs */}
+                      <div className="space-y-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                         {Object.entries(performanceConfig.divisionWeights).map(([divName, weight]) => (
+                            <div key={divName} className="flex justify-between items-center gap-2">
+                               <input 
+                                 type="text" 
+                                 value={divName}
+                                 onChange={(e) => {
+                                    const newName = e.target.value;
+                                    const { [divName]: oldWeight, ...rest } = performanceConfig.divisionWeights;
+                                    setPerformanceConfig(prev => ({
+                                       ...prev,
+                                       divisionWeights: { ...rest, [newName]: oldWeight }
+                                    }));
+                                 }}
+                                 className="text-xs font-bold bg-white border border-purple-100 rounded px-2 py-1 w-24"
+                               />
+                               <div className="flex items-center gap-2">
+                                 <input
+                                   type="number"
+                                   value={weight}
+                                   onChange={(e) => {
+                                      const val = parseFloat(e.target.value) || 0;
+                                      setPerformanceConfig(prev => ({
+                                         ...prev,
+                                         divisionWeights: { ...prev.divisionWeights, [divName]: val }
+                                      }));
+                                   }}
+                                   className="w-16 text-center text-xs font-bold bg-white border border-purple-100 rounded px-2 py-1"
+                                 />
+                                 <button 
+                                   onClick={() => {
+                                      const { [divName]: _, ...rest } = performanceConfig.divisionWeights;
+                                      setPerformanceConfig(prev => ({ ...prev, divisionWeights: rest }));
+                                   }}
+                                   className="text-red-400 hover:text-red-500"
+                                 >
+                                    <Trash2 className="w-3 h-3" />
+                                 </button>
+                               </div>
+                            </div>
+                         ))}
+                         <button
+                           onClick={() => setPerformanceConfig(prev => ({
+                              ...prev,
+                              divisionWeights: { ...prev.divisionWeights, [`New Div ${Date.now()}`]: 0 }
+                           }))}
+                           className="text-[10px] font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full"
+                         >
+                           + Add Division
+                         </button>
+                      </div>
+                   </div>
+                </div>
+              </div>
+
+              {/* Employee Audits List */}
               <div className="space-y-4">
+                 {/* Existing Evaluatee Map Logic with Enhancements */}
                  {formData.evaluateeIds.map(eId => {
                     const evaluatee = users.find(u => u.id === eId);
                     const myObjectives = objectives.filter(o => o.userId === eId);
+                    const ownObjs = myObjectives.filter(o => o.type === 'own');
+                    const sharedObjs = myObjectives.filter(o => o.type === 'shared');
                     const isExpanded = expandedEvaluatee === eId;
-
+                    
                     return (
                       <div key={eId} className={`border rounded-[32px] overflow-hidden transition-all ${isExpanded ? 'border-blue-200 ring-4 ring-blue-50/50' : 'border-slate-100'}`}>
+                        {/* Header */}
                         <button 
                           onClick={() => setExpandedEvaluatee(isExpanded ? null : eId)}
                           className="w-full flex items-center justify-between p-6 bg-white hover:bg-slate-50 transition-colors"
                         >
-                          <div className="flex items-center gap-4">
+                           <div className="flex items-center gap-4">
                              <img src={evaluatee?.avatar} className="w-10 h-10 rounded-xl" />
-                             <div>
+                             <div className="text-left">
                                <p className="font-black text-slate-900">{evaluatee?.name}</p>
-                               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{myObjectives.length} Strategic Objectives</p>
+                               <div className="flex gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                  <span>OWN: {ownObjs.length}</span>
+                                  <span>SHARED: {sharedObjs.length}</span>
+                               </div>
                              </div>
-                          </div>
-                          <ChevronDown className={`transition-transform duration-500 ${isExpanded ? 'rotate-180' : ''}`} />
+                           </div>
+                           <ChevronDown className={`transition-transform duration-500 ${isExpanded ? 'rotate-180' : ''}`} />
                         </button>
 
                         <AnimatePresence>
                           {isExpanded && (
                             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }}>
-                              <div className="p-8 bg-slate-50/50 border-t border-slate-100 space-y-6">
-                                {myObjectives.map(obj => (
-                                  <div key={obj.id} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                                    <div className="flex justify-between items-center mb-4">
-                                      <h5 className="font-black text-sm text-slate-900 flex items-center gap-2">
-                                        <div className={`w-2 h-2 rounded-full ${obj.type === 'own' ? 'bg-blue-500' : 'bg-blue-500'}`} />
-                                        {obj.title}
-                                      </h5>
-                                      <span className="text-[10px] font-black uppercase bg-slate-100 px-2 py-1 rounded-md text-slate-500">Weight: {obj.weight}%</span>
-                                    </div>
-                                    <div className="grid gap-2">
-                                      {getObjectKPIs(obj.id).map(kpi => (
-                                        <div key={kpi.id} className="text-xs text-slate-400 font-bold flex justify-between border-b border-slate-50 py-2">
-                                          <span>{kpi.title}</span>
-                                          <span className="text-slate-900 font-black">{kpi.weight}%</span>
+                              <div className="p-8 bg-slate-50/50 border-t border-slate-100 grid md:grid-cols-2 gap-6">
+                                {/* OWN Column */}
+                                <div className="space-y-4">
+                                   <div className="flex justify-between items-center">
+                                      <h5 className="font-black text-xs uppercase text-blue-600 tracking-widest">OWN Objectives</h5>
+                                      <span className="text-xs font-black bg-blue-100 text-blue-700 px-2 py-0.5 rounded">{(performanceConfig.ownPercentage * 0.75).toFixed(1)}% of Final</span>
+                                   </div>
+                                   {ownObjs.map(obj => (
+                                      <div key={obj.id} className="bg-white p-4 rounded-2xl border border-blue-100 shadow-sm relative overflow-hidden">
+                                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"/>
+                                         <p className="font-bold text-sm text-slate-900">{obj.title}</p>
+                                         <p className="text-xs text-slate-400 mt-1">Weight: {obj.weight}% (of Own KPIs)</p>
+                                      </div>
+                                   ))}
+                                   <div className="bg-slate-100/50 p-4 rounded-xl border border-dashed border-slate-300 text-center">
+                                      <p className="text-xs font-bold text-slate-400 italic">Competency Score (25% of OWN)</p>
+                                      <p className="text-[10px] text-slate-400 mt-1">Determined by peer/360 evaluation</p>
+                                   </div>
+                                </div>
+
+                                {/* SHARED Column */}
+                                <div className="space-y-4">
+                                   <h5 className="font-black text-xs uppercase text-purple-600 tracking-widest">SHARED Objectives</h5>
+                                   {Object.entries(performanceConfig.divisionWeights).map(([divName, weight]) => {
+                                      // Find shared objectives for this division
+                                      const divObjs = sharedObjs.filter(o => o.division === divName || (!o.division && divName === 'Other')); 
+                                      return (
+                                        <div key={divName} className="space-y-2">
+                                           <div className="flex justify-between items-center px-2">
+                                              <span className="text-xs font-black text-slate-700">{divName}</span>
+                                              <span className="text-xs font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded">{weight}% of Final</span>
+                                           </div>
+                                           {divObjs.length > 0 ? divObjs.map(obj => (
+                                              <div key={obj.id} className="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm relative overflow-hidden">
+                                                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500"/>
+                                                 <p className="font-bold text-sm text-slate-900">{obj.title}</p>
+                                                 <p className="text-xs text-slate-400 mt-1">Weight: {obj.weight}% (of {divName})</p>
+                                              </div>
+                                           )) : (
+                                              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-[10px] text-slate-400 italic">
+                                                 No objectives shared with {divName}
+                                              </div>
+                                           )}
                                         </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                ))}
+                                      )
+                                   })}
+                                </div>
                               </div>
                             </motion.div>
                           )}

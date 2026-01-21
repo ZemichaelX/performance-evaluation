@@ -20,6 +20,7 @@ export interface Objective {
   description: string;
   weight: number; // Weight within its category (e.g., 25% of "Own" weight)
   type: 'own' | 'shared';
+  division?: string; // e.g. "OD", "RMS", "F&I"
 }
 
 export interface KPI {
@@ -48,6 +49,24 @@ export interface CompetencyFramework {
 export interface CompetencyScore {
   questionId: string;
   score: number; // 1-5
+}
+
+export interface SharedContributor {
+  id: string;
+  name: string;  // Department, division, or employee name
+  type: 'department' | 'division' | 'employee';
+  percentage: number;  // Contribution to SHARED performance
+  entityId?: string;  // Optional: reference to actual entity
+}
+
+export interface PerformanceConfiguration {
+  ownPercentage: number;  // e.g., 55
+  sharedPercentage: number;  // e.g., 45
+  // Division breakdown within SHARED (e.g., "OD": 20, "RMS": 10, "F&I": 10)
+  divisionWeights: {
+    [divisionName: string]: number;
+  };
+  locked: boolean;  // Lock after evaluation launch
 }
 
 export interface EvaluationSubmission {
@@ -88,4 +107,5 @@ export interface EvaluationCycle {
     leadership: boolean;
   };
   customCompetencyFrameworkIds?: string[];
+  performanceConfig?: PerformanceConfiguration;
 }
